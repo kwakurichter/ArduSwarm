@@ -1,0 +1,3 @@
+[submodule "submodules/ArduPilot_cus"]
+	path = submodules/ArduPilot_cus
+	url = git@github.com:kwakurichter/ArduPilot_cus.git
