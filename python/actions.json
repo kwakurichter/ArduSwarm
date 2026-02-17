@@ -1,0 +1,59 @@
+{
+    "version": 1,
+    "fileType": "MavlinkActions",
+    "actions": [
+        {
+            "label": "Start OptFlow Cal",
+            "description": "Trigger Optical Flow Calibration (High)",
+            "mavCmd": 218,
+            "param1": 158,
+            "param2": 2
+        },
+        {
+            "label": "Stop OptFlow Cal",
+            "description": "Stop/Cancel Optical Flow Calibration (Low)",
+            "mavCmd": 218,
+            "param1": 158,
+            "param2": 0
+        },
+        {
+            "label": "Start AutoTune",
+            "description": "Trigger AutoTune Calibration (High)",
+            "mavCmd": 218,
+            "param1": 17,
+            "param2": 2
+        },
+        {
+            "label": "Stop AutoTune",
+            "description": "Stop/Cancel AutoTune Calibration (Low)",
+            "mavCmd": 218,
+            "param1": 17,
+            "param2": 0
+        },
+        {
+            "label": "Set EKF Origin",
+            "description": "Sets EKF Global Origin to Lab Coords (Lat/Lon/Alt)",
+            "mavCmd": 48,
+            "compId": 1,
+            "param1": 454198610,
+            "param2": -756790830,
+            "param3": 0,
+            "param4": 0,
+            "param5": 0,
+            "param6": 0,
+            "param7": 0
+        },        
+        {
+        "label": "MISSION_GO",
+        "description": "Start companion mission",
+        "mavCmd": 42428,
+        "param1": 1
+        },
+        {
+        "label": "MISSION_ABORT",
+        "description": "Abort companion mission",
+        "mavCmd": 42428,
+        "param1": 0  
+        }        
+    ]
+}

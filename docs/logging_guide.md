@@ -70,13 +70,13 @@ This line defines the sd card deck as an SPI device with the pointer â€œsdcardâ€
 ### Compiling & Flashing to the Crazyflie
 Before using the sd card in ArduPilot, we need to compile the custom firmware and flash it the Crazyflie.
 
-For detailed flashing instructions, please reference the [Compiling & Flashing Guide](compiling_and_flashing.md).
+For detailed flashing instructions, please reference the [Compiling & Flashing Guide](/docs/compiling_and_flashing.md).
 
 If you attempt to compile your firmware and get a build failed error:
 ```
 Build failed -> task in 'bin/arducopter' failed (exit status 1)
 ```
-Chances are you have exceeded the memory limit. Please reference the [Freeing up Memory Guide](freeing_up_memory.md) for detailed instructions on how to reduce the build size.
+Chances are you have exceeded the memory limit. Please reference the [Freeing up Memory Guide](/docs/freeing_up_memory.md) for detailed instructions on how to reduce the build size.
 
 ### Formatting SD Card
 ArduPilot's filesystem expects the external SD card to be formatted FAT. To proceed, please format your SD card with a single FAT partition.

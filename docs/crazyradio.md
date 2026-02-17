@@ -290,7 +290,7 @@ extern bool g_syslink_ready;    // Indicates when NRF is ready to receive
 
 ***Add New Drivers***
 
-The next step is to add the new driver files which handle processing the outgoing Syslink stream ([RadioBuffer.cpp](../../libraries/GCS_MAVLink/RadioBuffer.cpp) and [RadioBuffer.h](../../libraries/GCS_MAVLink/RadioBuffer.h)) and the incoming Syslink stream ([SyslinkReassembler.cpp](../../libraries/GCS_MAVLink/SyslinkReassembler.cpp) and [SyslinkReassembler.h](../../libraries/GCS_MAVLink/SyslinkReassembler.h)):
+The next step is to add the new driver files which handle processing the outgoing Syslink stream ([RadioBuffer.cpp](../submodules/ArduPilot_cus/libraries/GCS_MAVLink/RadioBuffer.cpp) and [RadioBuffer.h](../submodules/ArduPilot_cus/libraries/GCS_MAVLink/RadioBuffer.h)) and the incoming Syslink stream ([SyslinkReassembler.cpp](../submodules/ArduPilot_cus/libraries/GCS_MAVLink/SyslinkReassembler.cpp) and [SyslinkReassembler.h](../submodules/ArduPilot_cus/libraries/GCS_MAVLink/SyslinkReassembler.h)):
 - Navigate to the GCS_MAVLink folder:
 ```
 path\...\ardupilot\libraries\GCS_MAVLink
@@ -665,16 +665,16 @@ Similarly, P2P (Peer-to-Peer) packets which are received from the NRF51 are pars
 ## Flashing the NRF51
 The next step to getting the Crazyradio working in ArduPilot is to flash the NRF51 with a custom version of the legacy Bitcraze firmware. This step should be completed first before compiling and flashing the custom ArduPilot firmware.
 
-Please reference the [Flashing the NRF Guide](flashing_the_nrf.md).
+Please reference the [Flashing the NRF Guide](/docs/flashing_the_nrf.md).
 
 ## Compiling & Flashing to the Crazyflie
-Before using the new Crazyradio in ArduPilot, we need to compile the custom firmware and flash it the Crazyflie. For detailed flashing instructions, please reference the [Compiling & Flashing Guide](compiling_and_flashing.md).
+Before using the new Crazyradio in ArduPilot, we need to compile the custom firmware and flash it the Crazyflie. For detailed flashing instructions, please reference the [Compiling & Flashing Guide](/docs/compiling_and_flashing.md).
 
 If you attempt to compile your firmware and get a build failed error: 
 ```
 Build failed -> task in 'bin/arducopter' failed (exit status 1)
 ```
-Chances are you have exceeded the memory limit. Please reference the [Freeing up Memory Guide](freeing_up_memory.md) for detailed instructions on how to reduce the build size.
+Chances are you have exceeded the memory limit. Please reference the [Freeing up Memory Guide](/docs/freeing_up_memory.md) for detailed instructions on how to reduce the build size.
 
 ## Testing and Using Crazyradio
 Once you have successfully flashed your custom firmware with Crazyradio, using the custom protocol is a bit more involved than the legacy options. First, we need to change all of the serial protocols to MAVLink2 by changing the following parameters in your GCS of choice:
@@ -689,4 +689,4 @@ param set SERIAL2_BAUD 1000
 ```
 After changing these parameters and saving them to memory, restart the system by either cutting power to the drone directly or sending a reboot command through MAVLink.
 
-Once the system has restarted, the communication link should now be active. Connect to your drone from the GCS by referencing the [Custom GCS Guide](custom_gcs_guide.md).
+Once the system has restarted, the communication link should now be active. Connect to your drone from the GCS by referencing the [Custom GCS Guide](/docs/custom_gcs_guide.md).

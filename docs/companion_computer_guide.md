@@ -32,7 +32,7 @@ If you plan on using pre-compiled firmware and don't plan on customizing the aut
 ### Developing for the AI Deck
 Writing custom automation scripts is the heart of the ArduSwarm project. The ArduSwarm API provides a user-friendly sandbox environment to write scripts for swarming applications, automated mission sets and much more.
 
-Please reference the [Using the API for Custom Automation](using_the_api_for_custom_automation.md) guide for detailed instructions of the development process.
+Please reference the [Using the API for Custom Automation](/docs/using_the_api_for_custom_automation.md) guide for detailed instructions of the development process.
 
 ## Flashing AI Deck
 To flash firmware to the AI Deck, we need to use the Bitcraze provided tools for over the air flashing. This process requires the use of a Crazyflie drone flashed with the default Bitcraze firmware, a computer with the Bitcraze python library installed, and a [PA radio dongle](https://www.bitcraze.io/products/crazyradio-pa/).
@@ -69,19 +69,19 @@ cfclient
 
 - Press the "scan" button in the Crazyflie application, select the "usb://0" option.
 
-![Client Scan](images/companion_computer_guide/client-scan.png)
+![Client Scan](/docs/images/companion_computer_guide/client-scan.png)
 
 - Press "connect" and then navigate to "Configure 2.x".
 
-![Client Connect](images/companion_computer_guide/client-connect.png)
+![Client Connect](/docs/images/companion_computer_guide/client-connect.png)
 
 - In the configure window, record the radio channel, bandwidth, and address.
 
-![Client Configure](images/companion_computer_guide/client-configure.png)
+![Client Configure](/docs/images/companion_computer_guide/client-configure.png)
 
 - Close the Bitcraze application.
 
-- Find the local copy of your AI deck firmware. If you wish to use pre-compiled firmware, please download [here](compiled_firmware).
+- Find the local copy of your AI deck firmware. If you wish to use pre-compiled firmware, please download [here](/docs/compiled_firmware).
 
 - In the terminal, enter the following command to flash the AI deck over the air:
 '''
@@ -92,10 +92,10 @@ Where the radio should match the channel, bandwidth, and address of your specifi
 
 The drone will proceed to flash the AI deck over the air. The drone will restart several times during the process.
 
-If you came from the Quick Start Guide, return to the guide [here](quick_start_guide.md). Otherwise, proceed to the next section.
+If you came from the Quick Start Guide, return to the guide [here](/docs/quick_start_guide.md). Otherwise, proceed to the next section.
 
 ## Testing and Using the AI Deck
-Now that the AI deck is flashed with custom firmware, we can use it within the ArduSwarm platform. If you need to flash ArduPilot onto your drone after restoring it to default firmware in this guide, please reference the [Compiling and Flashing Guide](compiling_and_flashing.md).
+Now that the AI deck is flashed with custom firmware, we can use it within the ArduSwarm platform. If you need to flash ArduPilot onto your drone after restoring it to default firmware in this guide, please reference the [Compiling and Flashing Guide](/docs/compiling_and_flashing.md).
 
 ### Setup
 Once you have attached the AI deck to your Crazyflie which has ArduPilot flashed on it, power on the drone and connect the drone to a GCS. Update the following parameters:
@@ -111,19 +111,19 @@ SERIAL3_PROTOCOL 2
 Reset the drone by powering the Crazyflie on/off. The Crazyflie should now be able to communicate with the AI deck over serial.
 
 ### Telemetry Link
-If you flashed the [mavbridge firmware](compiled_firmware/ai_deck/mavbridge/) onto the AI deck to use the AI deck as a telemetry link, there are a couple extra steps to get telemetry working with your GCS of choice.
+If you flashed the [mavbridge firmware](/docs/compiled_firmware/ai_deck/mavbridge/) onto the AI deck to use the AI deck as a telemetry link, there are a couple extra steps to get telemetry working with your GCS of choice.
 
 - Open your GCS of choice (ex. QGroundControl).
 
 - Open the connection settings in your GCS.
 
-![GCS WiFi Settings](images/companion_computer_guide/gcs-settings.png)
+![GCS WiFi Settings](/docs/images/companion_computer_guide/gcs-settings.png)
 
 - Create a new connection link with the following parameters:
 
-![GCS UDP Setup](images/companion_computer_guide/gcs-wifi.png)
+![GCS UDP Setup](/docs/images/companion_computer_guide/gcs-wifi.png)
 
-Next, download a local copy of the [mavbridge python script](python/mavbridge.py). This script will forward the telemetry link being sent over WiFi from the AI deck to your GCS.
+Next, download a local copy of the [mavbridge python script](/docs/python/mavbridge.py). This script will forward the telemetry link being sent over WiFi from the AI deck to your GCS.
 
 Next, connect to the WiFi network "AIDeckDebugAP".
 
@@ -141,11 +141,11 @@ Note that this script requires the following python libraries as prerequisites:
 Finally, open your GCS of choice. If you set up the UDP connection correctly, the GCS should automatically connect to your Crazyflie's telemetry stream. You can now use the drone regularly in ArduPilot.
 
 ### Custom Mission
-If you flashed a custom mission onto the AI deck (ex. [voodoo](compiled_firmware/ai_deck/voodoo/)), using the AI deck depends on how you have configured your custom firmware.
+If you flashed a custom mission onto the AI deck (ex. [voodoo](/docs/compiled_firmware/ai_deck/voodoo/)), using the AI deck depends on how you have configured your custom firmware.
 
 Most firmware use the wifi_mission_control() function to manage the mission through user commands over WiFi. To use this firmware, we need to connect to the WiFi access point created by the AI deck and send commands.
 
-First, download a local copy of the [WiFi Command python script](python/wifi_command.py). This script will connect send user commands to the AI deck and receive messages sent by the AI deck.
+First, download a local copy of the [WiFi Command python script](/python/wifi_command.py). This script will connect send user commands to the AI deck and receive messages sent by the AI deck.
 
 Next, connect to the WiFi network "AIDeckDebugAP".
 

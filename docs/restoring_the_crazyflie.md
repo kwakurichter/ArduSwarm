@@ -39,43 +39,43 @@ Before we can flash the loader tool to the Crazyflie drone, we need to manually 
     - The M2 LED should begin blinking slowly. Keep holding the power button until the M2 LED begins to blink faster (around 3 seconds).
     - Release the power button.
     <video width="600" controls>
-      <source src="images/compiling_and_flashing/bootloader-second.mp4" type="video/mp4">
+      <source src="/docs/images/compiling_and_flashing/bootloader-second.mp4" type="video/mp4">
     </video>    
 
 ### Flash the Loader Firmware
 With STM32CubeProgrammer open and the Crazyflie in bootloader mode, we start by connecting the drone to the flashing software.
 
 - Change the connection type from UART to USB in the drop-down menu:
-![USB Selection](images/restoring_the_crazyflie/restoring_the_crazyflie_1.png)
+![USB Selection](/docs/images/restoring_the_crazyflie/restoring_the_crazyflie_1.png)
 - Search for devices and ensure a usb device is found:
-![USB Search](images/restoring_the_crazyflie/restoring_the_crazyflie_2.png)
+![USB Search](/docs/images/restoring_the_crazyflie/restoring_the_crazyflie_2.png)
 - Next, connect to the drone:
-![USB Connect](images/restoring_the_crazyflie/restoring_the_crazyflie_3.png)
+![USB Connect](/docs/images/restoring_the_crazyflie/restoring_the_crazyflie_3.png)
 - Once the drone has connected, press the “Open file” button:
-![Open File](images/restoring_the_crazyflie/restoring_the_crazyflie_4.png)
+![Open File](/docs/images/restoring_the_crazyflie/restoring_the_crazyflie_4.png)
 - Navigate to the loader tool from earlier and open it:
-![Select File](images/restoring_the_crazyflie/restoring_the_crazyflie_5.png)
+![Select File](/docs/images/restoring_the_crazyflie/restoring_the_crazyflie_5.png)
 - Once opened, press the “Download” button to flash the firmware:
-![Flash Crazyflie](images/restoring_the_crazyflie/restoring_the_crazyflie_6.png)
+![Flash Crazyflie](/docs/images/restoring_the_crazyflie/restoring_the_crazyflie_6.png)
 - After the tool is finished flashing, disconnect the usb from the Crazyflie.
 
 ### Restore Crazyflie Firmware over Radio
 - Open a terminal and start the cfclient software by entering the following command:
-![Open Cfclient](images/restoring_the_crazyflie/restoring_the_crazyflie_7.png)
+![Open Cfclient](/docs/images/restoring_the_crazyflie/restoring_the_crazyflie_7.png)
 - Once the client is open, put the drone into bootloader mode:
     - Disconnect all power sources (remove battery, unplug usb cable).
     - Press and hold the power button. While holding the power button:
         - Plug the usb cable into the drone.
         - Once the M2 LED starts flashing, release the power button immediately.
 - In the cfclient, navigate to the “Connect” and then “Bootloader” button:
-![Open Bootloader](images/restoring_the_crazyflie/restoring_the_crazyflie_8.png)
+![Open Bootloader](/docs/images/restoring_the_crazyflie/restoring_the_crazyflie_8.png)
 - In the bootloader window, press the “Cold boot (recovery)” button:
-![Open Cold Boot](images/restoring_the_crazyflie/restoring_the_crazyflie_9.png)
+![Open Cold Boot](/docs/images/restoring_the_crazyflie/restoring_the_crazyflie_9.png)
 - Insert the Crazyflie PA Radio into your computer.
 - Ensure that the “cf2” option is selected:
-![Select cf2](images/restoring_the_crazyflie/restoring_the_crazyflie_10.png)
+![Select cf2](/docs/images/restoring_the_crazyflie/restoring_the_crazyflie_10.png)
 - Once the “Status” in the bottom left-hand corner changes to “connected”, press the “Program” button in the bottom right-hand corner.
-![Flashing](images/restoring_the_crazyflie/flashing.png)
+![Flashing](/docs/images/restoring_the_crazyflie/flashing.png)
 
 Cfclient will now re-flash the Bitcraze firmware onto the Crazyflie over the air.
 

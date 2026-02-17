@@ -12,7 +12,7 @@ In the Bitcraze firmware, the NRF51 polls the battery at regular intervals for s
 For ArduSwarm we adopt a similar strategy, using the MAVLink protocol rather than Bitcraze's proprietary protocols.
 
 ### How It Works
-The battery monitor works by using the communication infrastructure developed for the [CrazyRadio](crazyradio.md) implementation. If you have not already enabled CrazyRadio on your drone, please follow that guide before proceeding.
+The battery monitor works by using the communication infrastructure developed for the [CrazyRadio](/docs/crazyradio.md) implementation. If you have not already enabled CrazyRadio on your drone, please follow that guide before proceeding.
 
 1. **NRF51 Battery Status**
 - On boot, the NRF51 begins polling the battery for state updates as a backend task.
@@ -229,15 +229,15 @@ This function now decodes battery status messages sent by the NRF51 and passes t
 ## Compiling & Flashing to the Crazyflie
 Before using the new battery monitor driver in ArduPilot, we need to compile the custom firmware and flash it the Crazyflie.
 
-For detailed flashing instructions, please reference the [Compiling & Flashing Guide](compiling_and_flashing.md).
+For detailed flashing instructions, please reference the [Compiling & Flashing Guide](/docs/compiling_and_flashing.md).
 
 If you attempt to compile your firmware and get a build failed error:
 ```
 Build failed -> task in 'bin/arducopter' failed (exit status 1)
 ```
-Chances are you have exceeded the memory limit. Please reference the [Freeing up Memory Guide](freeing_up_memory.md) for detailed instructions on how to reduce the build size.
+Chances are you have exceeded the memory limit. Please reference the [Freeing up Memory Guide](/docs/freeing_up_memory.md) for detailed instructions on how to reduce the build size.
 
-## Testing and Using Optical Flow
+## Testing and Using Battery Monitor
 Once you have successfully flashed both the NRF51 and the STM32 with the custom firmware, we are ready to enable the battery monitor in ArduPilot.
 
 Start by changing the following parameters upon startup of your drone:
@@ -257,6 +257,6 @@ After changing the parameter values and saving them to memory, restart the syste
 
 The battery monitor should now initialize properly upon powering the system. In your Ground Control Station of choice (ie. QGroundControl, MavProxy, etc.), verify the sensor is working properly by monitoring the live feed of the battery state:
 
-![Battery Monitor](images/battery_monitor/battery-monitor.png)
+![Battery Monitor](/docs/images/battery_monitor/battery-monitor.png)
 
 Note that the current implementation has a bug which causes the voltage to report incorrectly in the GCS as shown in the above photo. For now, the correct voltage can be seen in the drone's console feed through a recurring print statement. Future iterations will fix this.

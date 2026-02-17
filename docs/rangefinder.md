@@ -2,7 +2,7 @@
 ## What is ToF?
 Time of flight (ToF) rangefinders like the VL53L1x work by emitting short, nanosecond scale pulses of invisible 940 nm laser light and then timing how long it takes for those pulses to bounce off a target and return to the sensor’s SPAD (single photon avalanche diode) detector.
 
-![RangeFinder Principle](images/rangefinder/rangefinder_2.png)
+![RangeFinder Principle](/docs/images/rangefinder/rangefinder_2.png)
 
 *Craig, R. “Time-of-Flight Camera.” Wikipedia, Wikimedia Foundation, 16 May 2021, en.wikipedia.org/wiki/Time-of-flight_camera.*
 
@@ -58,7 +58,7 @@ if (_add_backend(AP_RangeFinder_VL53L1X::detect(state[instance], params[instance
 ```
 This simplifies the driver implementation as we hard-code the sensor distance mode rather than passing a separate parameter. Note that we may revert in the future if necessary.
 
-The next step is to replace the existing driver [implementation](../../libraries/AP_RangeFinder/AP_RangeFinder_VL53L1X.cpp) and [header](../../libraries/AP_RangeFinder/AP_RangeFinder_VL53L1X.h) files with the attached files.
+The next step is to replace the existing driver [implementation](../submodules/ArduPilot_cus/libraries/AP_RangeFinder/AP_RangeFinder_VL53L1X.cpp) and [header](../submodules/ArduPilot_cus/libraries/AP_RangeFinder/AP_RangeFinder_VL53L1X.h) files with the attached files.
 
 - Replace the following implementation and header file respectively:
 ```
@@ -66,7 +66,7 @@ path\...\libraries\AP_RangeFinder\AP_RangeFinder_VL53L1X.cpp
 
 path\...\libraries\AP_RangeFinder\AP_RangeFinder_VL53L1X.h
 ```
-As mentioned previously, the new driver uses the ST Microelectronics API directly instead of manually handling the device. The next step is thus to add the [3rd Party API](../../libraries/vl53l1x_api) to the ArduPilot firmware.
+As mentioned previously, the new driver uses the ST Microelectronics API directly instead of manually handling the device. The next step is thus to add the [3rd Party API](../submodules/ArduPilot_cus/libraries/vl53l1x_api) to the ArduPilot firmware.
 
 - Navigate to the libraries folder:
 ```
@@ -132,7 +132,7 @@ bld.ap_stlib(
 ```
 The compiler will now properly link the 3rd party API with our updated driver. Calling functions, accessing classes, etc. is now possible. 
 ## Compiling & Flashing to the Crazyflie
-Before using the new range finder driver in ArduPilot, we need to compile the custom firmware and flash it the Crazyflie. For detailed flashing instructions, please reference the [Compiling & Flashing Guide](compiling_and_flashing.md).
+Before using the new range finder driver in ArduPilot, we need to compile the custom firmware and flash it the Crazyflie. For detailed flashing instructions, please reference the [Compiling & Flashing Guide](/docs/compiling_and_flashing.md).
 
 Range finders are not intended for lightweight MCU’s such as the STM32 found on the Crazyflie. ArduPilot only enables range finders by default on boards with at least 2 Mb of flash. As a result, we may need to free up more space to meet the 1 Mb hardware memory limitation.
 
@@ -140,7 +140,7 @@ If you attempt to compile your firmware and get a build failed error:
 ```
 Build failed -> task in 'bin/arducopter' failed (exit status 1)
 ```
-Chances are you have exceeded the memory limit. Please reference the [Freeing up Memory Guide](freeing_up_memory.md) for detailed instructions on how to minimize the build size.
+Chances are you have exceeded the memory limit. Please reference the [Freeing up Memory Guide](/docs/freeing_up_memory.md) for detailed instructions on how to minimize the build size.
 
 ## Testing and Using ToF
 Once you have successfully flashed your custom firmware with range finders enabled, using the flow deck is relatively simple. Start by changing the parameter “RNGFNDX_TYPE” from 0 to 16 upon startup of your drone.
@@ -170,6 +170,6 @@ After saving these new parameters, restart the system again.
 
 The ToF sensor on the flow deck should now initialize properly upon powering the system. In your Ground Control Station of choice (ie. QGroundControl, MavProxy, etc.), verify the sensor is working properly by monitoring the live feed of the RANGEFINDER parameter.
 
-![QGC RangeFinder](images/rangefinder/rangefinder_1.png)
+![QGC RangeFinder](/docs/images/rangefinder/rangefinder_1.png)
 
 If the RANGEFINDER parameter is present and the values are updated when the drone moves, the VL53L1x sensor is likely functioning properly.

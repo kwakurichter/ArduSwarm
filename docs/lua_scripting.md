@@ -81,7 +81,7 @@ end
 ```
 
 ## Compiling & Flashing to the Crazyflie
-After you have completed your custom Lua script and are ready to begin testing, we need to compile and flash the ArduPilot firmware. For detailed flashing instructions, please reference the [Compiling & Flashing Guide](compiling_and_flashing.md).
+After you have completed your custom Lua script and are ready to begin testing, we need to compile and flash the ArduPilot firmware. For detailed flashing instructions, please reference the [Compiling & Flashing Guide](/docs/compiling_and_flashing.md).
 
 The main difference here to note is that the Lua scripting feature is not intended for lightweight MCU’s such as the STM32 found on the Crazyflie. ArduPilot only enables scripting by default on boards with at least 2 Mb of flash.
 
@@ -91,7 +91,7 @@ If you attempt to compile your firmware and get a build failed error:
 ```
 Build failed -> task in 'bin/arducopter' failed (exit status 1)
 ```
-Chances are you have exceeded the memory limit. Please reference the [Freeing up Memory Guide](freeing_up_memory.md) for detailed instructions on how to minimize the build size.
+Chances are you have exceeded the memory limit. Please reference the [Freeing up Memory Guide](/docs/freeing_up_memory.md) for detailed instructions on how to minimize the build size.
 
 ## Testing and Using Lua Scripts
 Once you have successfully flashed your custom firmware with Lua scripting enabled and your custom Lua script saved, using the scripts is easy. Simply change the new parameter SCR_ENABLE from 0 to 1 upon startup of your drone.

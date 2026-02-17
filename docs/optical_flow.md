@@ -3,7 +3,7 @@
 ArduPilot ArduCopter supports a variety of optical flow sensors which estimate horizontal velocity.
 Optical flow velocity estimation works by analyzing successive frames from a downward facing camera to detect how small image features (edges, corners or textured patches) shift from one frame to the next. The onboard flow algorithm computes a 2D pixel displacement field by matching these features across frames at a known frame rate.
 
-![Optical Flow Principle](images/optical_flow/optical_flow_1.png)
+![Optical Flow Principle](/docs/images/optical_flow/optical_flow_1.png)
 
 *Gordon, Andrew. “Adventures in Optical Flow.” Technology, Thinking, Doing, 20 June 2021, www.andrewgordon.me/posts/Adventures-in-Optical-Flow/.*
 
@@ -134,18 +134,18 @@ path\...\libraries\AP_OpticalFlow\AP_OpticalFlow_config.h
 #ifndef AP_OPTICALFLOW_FLOWDECK_ENABLED #define AP_OPTICALFLOW_FLOWDECK_ENABLED AP_OPTICALFLOW_BACKEND_DEFAULT_ENABLED
 ```
 Finally, we are ready to add our new driver to the optical flow library.
-- In the optical flow directory, add the attached driver [implementation](../../libraries/AP_OpticalFlow/AP_OpticalFlow_FlowDeck.cpp) and [header](../../libraries/AP_OpticalFlow/AP_OpticalFlow_FlowDeck.h) file (“AP_OpticalFlow_FlowDeck.cpp” and “AP_OpticalFlow_FlowDeck.h” respectively).
+- In the optical flow directory, add the attached driver [implementation](../submodules/ArduPilot_cus/libraries/AP_OpticalFlow/AP_OpticalFlow_FlowDeck.cpp) and [header](../submodules/ArduPilot_cus/libraries/AP_OpticalFlow/AP_OpticalFlow_FlowDeck.h) file (“AP_OpticalFlow_FlowDeck.cpp” and “AP_OpticalFlow_FlowDeck.h” respectively).
 ```
 path\...\libraries\AP_OpticalFlow\
 ```
 ## VL53L1x in ArduPilot
 The next step to getting the FlowDeck working in ArduPilot is to modify the base ArduPilot firmware to include a driver for the VL53L1x ToF sensor.
 
-Please reference the [RangeFinder Guide](rangefinder.md) for detailed instructions.
+Please reference the [RangeFinder Guide](/docs/rangefinder.md) for detailed instructions.
 ## Compiling & Flashing to the Crazyflie
 Before using the new optical flow driver in ArduPilot, we need to compile the custom firmware and flash it the Crazyflie. 
 
-For detailed flashing instructions, please reference the [Compiling & Flashing Guide](compiling_and_flashing.md).
+For detailed flashing instructions, please reference the [Compiling & Flashing Guide](/docs/compiling_and_flashing.md).
 
 As with the Lua scripting feature, optical flow is not intended for lightweight MCU’s such as the STM32 found on the Crazyflie. ArduPilot only enables optical flow by default on boards with at least 2 Mb of flash. As a result, we may need to free up more space to meet the 1 Mb hardware memory limitation.
 
@@ -153,7 +153,7 @@ If you attempt to compile your firmware and get a build failed error:
 ```
 Build failed -> task in 'bin/arducopter' failed (exit status 1)
 ```
-Chances are you have exceeded the memory limit. Please reference the [Freeing up Memory Guide](freeing_up_memory.md) for detailed instructions on how to reduce the build size.
+Chances are you have exceeded the memory limit. Please reference the [Freeing up Memory Guide](/docs/freeing_up_memory.md) for detailed instructions on how to reduce the build size.
 
 ## Testing and Using Optical Flow
 Once you have successfully flashed your custom firmware with optical flow enabled, using the flow deck is relatively simple. Start by changing the new parameter FLOW_TYPE from 0 to 9 upon startup of your drone.
@@ -174,6 +174,6 @@ After saving these new parameters, restart the system again.
 
 The flow deck should now initialize properly upon powering the system. In your Ground Control Station of choice (ie. QGroundControl, MavProxy, etc.), verify the sensor is working properly by monitoring the live feed of the OPTICAL_FLOW parameter.
 
-![QGC Optical Flow](images/optical_flow/optical_flow_3.png)
+![QGC Optical Flow](/docs/images/optical_flow/optical_flow_3.png)
 
 If the OPTICAL_FLOW parameter is present and the values are updated when the drone moves, the PWM3901 sensor is likely functioning properly.

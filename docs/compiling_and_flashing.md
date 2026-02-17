@@ -43,7 +43,7 @@ A common build failure error you may encounter is related to the limited flash m
 ```
 Build failed -> task in 'bin/arducopter' failed (exit status 1)
 ```
-Chances are you have exceeded the memory limit. Please reference the [Freeing up Memory Guide](freeing_up_memory.md) for detailed instructions on how to the build size.
+Chances are you have exceeded the memory limit. Please reference the [Freeing up Memory Guide](/docs/freeing_up_memory.md) for detailed instructions on how to the build size.
 
 ## Flashing the Firmware
 If the compiler was successful and you have successfully built your custom ArduCopter firmware, we can now proceed to flashing the firmware onto the Crazyflie drone.
@@ -84,17 +84,17 @@ Before we can flash the firmware to the Crazyflie drone, we need to manually put
 With STM32CubeProgrammer open and the Crazyflie in bootloader mode, we start by connecting the drone to the flashing software.
 
 - Change the connection type from UART to USB in the drop-down menu:
-![USB Selection](images/compiling_and_flashing/compiling_and_flashing_1.png)
+![USB Selection](/docs/images/compiling_and_flashing/compiling_and_flashing_1.png)
 - Search for devices and ensure a usb device is found:
-![USB Search](images/compiling_and_flashing/compiling_and_flashing_2.png)
+![USB Search](/docs/images/compiling_and_flashing/compiling_and_flashing_2.png)
 - Next, connect to the drone:
-![USB Connect](images/compiling_and_flashing/compiling_and_flashing_3.png)
+![USB Connect](/docs/images/compiling_and_flashing/compiling_and_flashing_3.png)
 - Once the drone has connected, press the “Open file” button:
-![Open File](images/compiling_and_flashing/compiling_and_flashing_4.png)
+![Open File](/docs/images/compiling_and_flashing/compiling_and_flashing_4.png)
 - Navigate to your compiled firmware .hex file from earlier and open it:
-![Select File](images/compiling_and_flashing/compiling_and_flashing_5.png)
+![Select File](/docs/images/compiling_and_flashing/compiling_and_flashing_5.png)
 - Once opened, press the “Download” button to flash the firmware:
-![Flash Crazyflie](images/compiling_and_flashing/compiling_and_flashing_6.png)
+![Flash Crazyflie](/docs/images/compiling_and_flashing/compiling_and_flashing_6.png)
 - After the firmware is finished flashing, disconnect the usb from the Crazyflie.
 - Turn on the Crazyflie after restoring power to the drone.
 
@@ -102,4 +102,4 @@ Your Crazyflie drone is now flashed with ArduPilot. Note that flashing the drone
 
 Also, because we compiled our ArduPilot firmware with a bootloader earlier, we can re-flash the Crazyflie with a new custom firmware at any time by first putting the drone into bootloader mode as described previously and following the same instructions.
 
-If you need to restore the Crazyflie to the factory Bitcraze firmware for any reason, follow the instructions in the [Restoring the Crazyflie Guide](restoring_the_crazyflie.md).
+If you need to restore the Crazyflie to the factory Bitcraze firmware for any reason, follow the instructions in the [Restoring the Crazyflie Guide](/docs/restoring_the_crazyflie.md).
