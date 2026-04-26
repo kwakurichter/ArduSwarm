@@ -1,4 +1,4 @@
-# ArduSwarm: A Robust Test Platform for Swarm Robotics Research
+# ArduSwarm: A Self-Contained Micro-Aerial Vehicle Testbed for Experimental Swarm Flight Control Robotics Research
 ## Overview
 **ArduSwarm** is a project developed as part of a Master's in Mechanical Engineering at the **University of Ottawa**, designed to provide an accessible decentralized platform for research into drone swarm dynamics and defensive algorithms for indoor test environments. The platform leverages the **Bitcraze Crazyflie** hardware platform, which are small yet highly capable micro-copters, and integrates them with the **ArduPilot** flight control software (ArduCopter).
 
@@ -135,7 +135,7 @@ If you need to revert the Crazyflie to its original Bitcraze firmware for any re
 For step-by-step instructions, please see the [Restoring the Crazyflie Guide](docs/restoring_the_crazyflie.md).
 
 ### ArduPilot Support
-All of the development work detailed in this project is based on ArduPilot ArduCopter version 4.7.0 Dev (April 2025). This project is not yet officially supported by ArduPilot and thus is not maintained to the latest release of ArduCopter. As a result, functionality is not guaranteed for future releases.
+All of the development work detailed in this project is based on ArduPilot ArduCopter version 4.6.3 (Nov 2025). This project is not yet officially supported by ArduPilot and thus is not maintained to the latest release of ArduCopter. As a result, functionality is not guaranteed for future releases.
 
 If you attempt to port this work to more recent versions of ArduPilot and run into compilation errors due to depreciation issues, please revert back to this [repository](submodules/ArduPilot_cus).
 
@@ -155,4 +155,4 @@ This platform provides a foundation for a wide range of swarm robotics research.
 
 ---
 
-**Last Modified:** 2026-02-03
+**Last Modified:** 2026-04-25

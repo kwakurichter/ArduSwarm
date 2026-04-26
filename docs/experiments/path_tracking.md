@@ -58,6 +58,11 @@ Before starting the mission, do the same essential checks you used in First Flig
 - Optical flow is healthy (not zeroed / not stuck / reasonable quality)
 - ToF rangefinder updates when you lift/lower the drone by hand
 - SD logging is working (SD card detected, log created on arm/flight)
+- Set parameters:
+```
+PILOT_TKOFF_ALT = 100 (default)
+CF_LOOPS = 1 (default - how many loops you would like to perform)
+```
 
 This experiment is specifically meant to validate the onboard estimator that fuses IMU + optical flow + ToF.
 
@@ -65,8 +70,8 @@ This experiment is specifically meant to validate the onboard estimator that fus
 Place the drone on the ground in the test area and clear the space.
 1. In QGC, press your custom action (Mission Go / Start Tracking).
 2. The drone will execute the mission profile:
-    - Automated takeoff to a 0.8 m hover 
-    - Execute two consecutive patterns (West → South → East → North), implemented as RC override steps of approximately ±200 µs around 1500 µs 
+    - Automated takeoff to the set altitude (PILOT_TKOFF_ALT)
+    - Execute at least one pattern (West → South → East → North), implemented as RC override steps of approximately ±200 µs around 1500 µs 
     - Automated landing 
 
 This produces a square trajectory driven by the platform’s position controller.
