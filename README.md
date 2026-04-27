@@ -17,7 +17,7 @@ The **Crazyflie** platform was chosen for its unique combination of a small form
 - **Onboard localization** for indoor test environments
 - Support for expansion decks, such as the **Flow Deck** for optical flow and ranging, and the **AI Deck** for additional onboard computation.
 
-![2.1_BL](docs/images/README/hardware.jpg)
+![2.1_BL](docs/images/README/hardware.JPG)
 
 ### Software: ArduPilot (ArduCopter)
 **ArduPilot** is a professional-grade, open-source flight stack. Its adaptability and extensive feature set make it an ideal choice for this research platform. Key features include:
