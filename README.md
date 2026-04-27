@@ -137,7 +137,7 @@ For step-by-step instructions, please see the [Restoring the Crazyflie Guide](do
 ### ArduPilot Support
 All of the development work detailed in this project is based on ArduPilot ArduCopter version 4.6.3 (Nov 2025). This project is not yet officially supported by ArduPilot and thus is not maintained to the latest release of ArduCopter. As a result, functionality is not guaranteed for future releases.
 
-If you attempt to port this work to more recent versions of ArduPilot and run into compilation errors due to depreciation issues, please revert back to this [repository](submodules/ArduPilot_cus).
+If you attempt to port this work to more recent versions of ArduPilot and run into compilation errors due to depreciation issues, please revert back to this [repository](https://github.com/kwakurichter/ArduPilot_cus).
 
 ## 🔮 Future Work
 This platform provides a foundation for a wide range of swarm robotics research. Future work will include:
@@ -155,4 +155,4 @@ This platform provides a foundation for a wide range of swarm robotics research.
 
 ---
 
-**Last Modified:** 2026-04-25
+**Last Modified:** 2026-04-26
