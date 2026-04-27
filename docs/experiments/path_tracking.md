@@ -2,7 +2,7 @@
 ## Overview
 The Tracking experiment is a single-drone validation flight used to benchmark infrastructure-free localization on ArduSwarm. The drone executes a repeatable, open-loop “square-like” maneuver using RC overrides, while logging its onboard EKF position estimate (from IMU + optical flow + ToF) to the SD card for later analysis against OptiTrack ground truth.
 
-[▶ Watch video](../images/path_tracking/path_tracking.mp4)
+[![Path Tracking](https://img.youtube.com/vi/49ZPqF_hN3A/0.jpg)](https://www.youtube.com/watch?v=49ZPqF_hN3A)
 
 ## Requirements
 - 1 ArduSwarm drone equipped with:
