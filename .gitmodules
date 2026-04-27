@@ -1,9 +1,9 @@
 [submodule "submodules/ArduPilot_cus"]
 	path = submodules/ArduPilot_cus
-	url = git@github.com:kwakurichter/ArduPilot_cus.git
+	url = https://github.com/kwakurichter/ArduPilot_cus.git
 [submodule "submodules/nrf-firmware-cus"]
 	path = submodules/nrf-firmware-cus
-	url = git@github.com:kwakurichter/nrf-firmware-cus.git
+	url = https://github.com/kwakurichter/nrf-firmware-cus.git
 [submodule "submodules/aideck-firmware-cus"]
 	path = submodules/aideck-firmware-cus
-	url = git@github.com:kwakurichter/aideck-firmware-cus.git
+	url = https://github.com/kwakurichter/aideck-firmware-cus.git
