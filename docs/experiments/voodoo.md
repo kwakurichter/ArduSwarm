@@ -7,13 +7,9 @@ At a high level:
 - Follower: takes off to set altitude, hovers briefly, then moves in XY based on the leader’s pitch/roll
 - Failsafe: if P2P packets stop for ~1 s, the follower lands automatically
 
-<video width="600" controls>
-  <source src="/docs/images/voodoo/voodoo.mp4" type="video/mp4">
-</video>
+[▶ Watch video 1](../images/voodoo/voodoo.mp4)
 
-<video width="600" controls>
-  <source src="/docs/images/voodoo/voodoo3.mp4" type="video/mp4">
-</video>
+[▶ Watch video 2](../images/voodoo/voodoo3.mp4)
 
 ## Requirements
 - Min. Two ArduSwarm drones:
