@@ -1,23 +1,23 @@
 # Voodoo Experiment Guide
 ## Overview
-The Voodoo experiment is a multi-drone, leader–follower demonstration that validates ArduSwarm’s decentralized P2P command pipeline. A stationary Leader drone (disarmed, held by hand) broadcasts its attitude over the nRF51 P2P link, while flying Follower drone(s) interpret those broadcasts as discrete horizontal motion commands (RC overrides) using the AI Deck as a “virtual pilot.”
+The Voodoo experiment is a multi-drone, leader–follower demonstration that validates ArduSwarm’s decentralized P2P command pipeline. A stationary Leader drone (disarmed, held by hand) broadcasts its attitude over the nRF51 P2P link, while flying Follower drone(s) interpret those broadcasts as discrete horizontal velocity commands (position targets) using the AI Deck as a “virtual pilot.”
 
 At a high level:
 - Leader: disarmed, broadcasts attitude at 10 Hz over P2P
 - Follower: takes off to set altitude, hovers briefly, then moves in XY based on the leader’s pitch/roll
-- Failsafe: if P2P packets stop for ~1 s, the follower lands automatically
+- Failsafe: if P2P packets stop for ~1 s, the follower(s) lands automatically
 
 [![Voodoo Experiment](https://img.youtube.com/vi/4_Kyq2Xd3c0/0.jpg)](https://www.youtube.com/watch?v=4_Kyq2Xd3c0)
 
 ## Requirements
 - Min. Two ArduSwarm drones:
     - Leader drone (disarmed, handheld during experiment)
-    - Follower drone (flies autonomously)
+    - Follower(s) drone (flies autonomously)
 - A Ground Control Station (GCS) of your choice (we use QGroundControl)
 - The ArduSwarm Python WiFi telemetry bridge (same as [first flight](/docs/first_flight.md))
 - The provided firmware from this repo:
-    - Voodoo AI Deck firmware
-    - ArduPilot firmware
+    - [Voodoo AI Deck firmware](/docs/compiled_firmware/aideck/voodoo)
+    - [ArduPilot firmware](/docs/compiled_firmware/ardupilot)
     - QGC [actions](/python/actions.json) file for custom actions
 - Indoor flight space requirements are the same as [first flight](/docs/first_flight.md):
     - Good lighting
@@ -26,7 +26,7 @@ At a high level:
 
 ## Step 1 — Flash required firmware
 ### Flash the AI Deck with Voodoo firmware
-Flash the AI Deck with the Voodoo experiment firmware provided in this repository.
+Flash the AI Deck with the [Voodoo experiment firmware](/docs/compiled_firmware/aideck/voodoo) provided in this repository.
 - Follow the repo’s [Companion Computer Guide](/docs/companion_computer_guide.md).
 
 ### Flash the Leader drone with Leader ArduPilot
@@ -153,7 +153,7 @@ A successful run typically looks like:
     - Confirm follower shows “peer broadcasts received” status text before starting
     - Keep leader close during the first hover window
 
-### Follower drifts or LOITER is unstable
+### Follower drifts or GUIDED is unstable
 - Improve optical flow conditions (lighting + textured floor)
 - Check ToF rangefinder health and orientation
 - Repeat [first flight](/docs/first_flight.md) tuning (hover throttle / notch/FFT learning) before re-running Voodoo

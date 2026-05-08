@@ -145,8 +145,7 @@ This platform provides a foundation for a wide range of swarm robotics research.
 - Implementing and testing specific differential game-based defensive algorithms.
 - Polish stability/throttle/position controller gain tune.
 - Developing a user-friendly interface for managing swarm experiments.
-- Implementing a relative positioning algorithm for collision avoidance.
-- Enable robust L1 path following algorithm.
+- Implementing a relative positioning algorithm for robust collision avoidance.
 
 ## ✍️ Author
 **Kwaku Richter**, Masters Student in Mechanical Engineering at the University of Ottawa
@@ -155,4 +154,4 @@ This platform provides a foundation for a wide range of swarm robotics research.
 
 ---
 
-**Last Modified:** 2026-04-26
+**Last Modified:** 2026-05-08

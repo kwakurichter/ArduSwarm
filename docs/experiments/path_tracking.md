@@ -1,6 +1,6 @@
 # Path Tracking Experiment Guide
 ## Overview
-The Tracking experiment is a single-drone validation flight used to benchmark infrastructure-free localization on ArduSwarm. The drone executes a repeatable, open-loop “square-like” maneuver using RC overrides, while logging its onboard EKF position estimate (from IMU + optical flow + ToF) to the SD card for later analysis against OptiTrack ground truth.
+The Tracking experiment is a single-drone validation flight used to benchmark infrastructure-free localization on ArduSwarm. The drone executes, closed-loop “square-like” maneuver using position targets, while logging its onboard EKF position estimate (from IMU + optical flow + ToF) to the SD card for later analysis against OptiTrack ground truth.
 
 [![Path Tracking](https://img.youtube.com/vi/49ZPqF_hN3A/0.jpg)](https://www.youtube.com/watch?v=49ZPqF_hN3A)
 
@@ -17,7 +17,7 @@ The Tracking experiment is a single-drone validation flight used to benchmark in
 
 ## Step 1 — Flash the Tracking experiment firmware (AI Deck)
 To run the experiment, you first need the AI Deck firmware build that contains the Tracking experiment mission script.
-1. Flash the AI Deck with the tracking firmware from this repo.
+1. Flash the AI Deck with the [trajectory firmware](/docs/compiled_firmware/aideck/trajectory).
 2. Follow the repo’s [Companion Computer Guide](/docs/companion_computer_guide.md) for exact flashing instructions.
 
 The flight controller (STM32 running ArduPilot/ArduCopter) should already be on your ArduSwarm build that passed First Flight.
@@ -69,8 +69,8 @@ Place the drone on the ground in the test area and clear the space.
 1. In QGC, press your custom action (Mission Go / Start Tracking).
 2. The drone will execute the mission profile:
     - Automated takeoff to the set altitude (PILOT_TKOFF_ALT)
-    - Execute at least one pattern (West → South → East → North), implemented as RC override steps of approximately ±200 µs around 1500 µs 
-    - Automated landing 
+    - Execute at least one pattern (West → South → East → North), in an approximate 1 by 1 m square
+    - Automated landing
 
 This produces a square trajectory driven by the platform’s position controller.
 
