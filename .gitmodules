@@ -7,3 +7,6 @@
 [submodule "submodules/aideck-firmware-cus"]
 	path = submodules/aideck-firmware-cus
 	url = https://github.com/kwakurichter/aideck-firmware-cus.git
+[submodule "submodules/crazyradio-cus"]
+	path = submodules/crazyradio-cus
+	url = https://github.com/kwakurichter/crazyradio-cus.git
