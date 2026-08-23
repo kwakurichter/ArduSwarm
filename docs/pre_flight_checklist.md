@@ -45,7 +45,7 @@ This final checklist will ensure your first flight doesn't end in disaster.
 4. Upload the parameters to the drone.
 - Turn on your assembled drone and plug it into your computer via the micro USB cable.
 - Open your GCS (Ground Control Station) of choice.
-- Download the default ArduSwarm parameters [here](/docs/parameters/default.params).
+- Download the default ArduSwarm parameters [here](/docs/parameters).
 - Navigate to the parameter tool in your GCS.
 
 | ![QGC Parameters (1)](/docs/images/pre_flight_checklist/qgc-parameters-1.png) | ![QGC Parameters (2)](/docs/images/pre_flight_checklist/qgc-parameters-2.png) | ![QGC Parameters (3)](/docs/images/pre_flight_checklist/qgc-parameters-3.png) |
@@ -57,7 +57,7 @@ This final checklist will ensure your first flight doesn't end in disaster.
 
 - Restart your drone.
 
-Alternatively, you can use the [parameter template](/docs/parameters/crazyflie%202.1/) and configure the drone manually by installing [ArduPilot Methodic Configurator](https://github.com/ArduPilot/MethodicConfigurator) on your PC and following the on-screen instructions.
+Alternatively, you can start from the [parameter file](/docs/parameters/21_default_BL.params) in this repository and configure the drone manually by installing [ArduPilot Methodic Configurator](https://github.com/ArduPilot/MethodicConfigurator) on your PC and following the on-screen instructions.
 
 5. Calibrate Sensors (i.e. accelerometer, gyroscope, barometer).
 - Plug your assembled drone into your computer with the micro USB cable.

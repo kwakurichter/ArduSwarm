@@ -19,118 +19,8 @@ Previous builds of ArduPilot already contain a driver for the VL53L1x sensor how
 
 Instead of attempting to fix the manual implementation, we include the API directly from the manufacturer to handle the low-level device operation. This provides a more robust, isolated driver implementation.
 
-To do this, we need to modify the existing VL53L1x driver in the legacy base ArduPilot firmware.
-### Modify the HWDEF file
-Start by enabling optical flow in the hardware definition file:
+To do this, we need to modify the existing VL53L1x driver in the legacy base ArduPilot firmware. For more details on how this was done, see the [tof driver doc](/docs/development/tof_driver.md).
 
-- In your development environment, navigate to the Crazyflie hwdef file: 
-```
-path\...\libraries\AP_HAL_ChibiOS\hwdef\crazyflie2\hwdef.dat
-```
-- Near the bottom of the file, find the line that minimizes the ArduPilot features:
-``` 
-include ../include/minimize_features.inc
-```
-- Underneath this line, include the following line: 
-```
-define AP_RANGEFINDER_ENABLED 1
-```
-This tells the compiler to include the range finder library in our ArduPilot build regardless of the minimize features directive.
-
-### Modify the Range Finder Library
-Next, we need to modify the existing driver in the range finder library:
-
-- Start by navigating to the legacy VL53L1x driver:
-```
-path\...\libraries\AP_RangeFinder\AP_RangeFinder.cpp
-```
-- Find the initializations of the drivers:
-```
-#if AP_RANGEFINDER_VL53L1X_ENABLED
-```
-- Remove the existing if statement here and replace it with the following:
-```
-if (_add_backend(AP_RangeFinder_VL53L1X::detect(state[instance], params[instance],
-                                                hal.i2c_mgr->get_device(i, params[instance].address)), // <-- Only 3 arguments now
-                    instance)) {
-    break;
-}
-```
-This simplifies the driver implementation as we hard-code the sensor distance mode rather than passing a separate parameter. Note that we may revert in the future if necessary.
-
-The next step is to replace the existing driver [implementation](../submodules/ArduPilot_cus/libraries/AP_RangeFinder/AP_RangeFinder_VL53L1X.cpp) and [header](../submodules/ArduPilot_cus/libraries/AP_RangeFinder/AP_RangeFinder_VL53L1X.h) files with the attached files.
-
-- Replace the following implementation and header file respectively:
-```
-path\...\libraries\AP_RangeFinder\AP_RangeFinder_VL53L1X.cpp
-
-path\...\libraries\AP_RangeFinder\AP_RangeFinder_VL53L1X.h
-```
-As mentioned previously, the new driver uses the ST Microelectronics API directly instead of manually handling the device. The next step is thus to add the [3rd Party API](../submodules/ArduPilot_cus/libraries/vl53l1x_api) to the ArduPilot firmware.
-
-- Navigate to the libraries folder:
-```
-path\...\ardupilot\libraries
-```
-- Add the attached “vl53l1x_api” folder and all of its contents to the libraries directory.
-
-This provides the driver with the low-level functions and backend infrastructure that are used to handle the sensor. These API files are up to date as of May 2025. Note that the API may change with future updates.
-
-ArduPilot is not built to handle 3rd party libraries as-is. The base ArduPilot firmware does not link the API files when compiling, so we need to make a few more critical changes.
-
-- Navigate to the main ArduPilot build script:
-```
-path\...\ardupilot\wscript
-```
-- Find the “build()” function definition, and under the following line:
-```
-bld.get_board().build(bld)
-```
-- Add the following:
-```
-bld.recurse('libraries/vl53l1x_api')    # Add Crazyflie flowdeck support via ST vl53l1x API
-```
-This line tells the compiler to recursively search the libraries folder for our 3rd party API by name. Without this line, the compiler will not find and initialize the API.
-
-It should be noted that this is a patch solution and should be cleaned up in the future.
-
-The next step is to add a similar hard-coded instruction to search for our 3rd party API at the lower ArduCopter level.
-
-- Navigate to the ArduCopter build script:
-```
-path\...\ardupilot\ArduCopter\wscript
-```
-
-- Under the following line:
-```
-vehicle = bld.path.name
-```
-- Add the following block of code:
-```
-bld.env.append_value(
-    'INCLUDES',
-    [   
-        'libraries/vl53l1x_api/core/inc',
-        'libraries/vl53l1x_api/platform/inc',
-    ],
-)
-```
-- Then, in the next block of code, add the following:
-```
-bld.ap_stlib(
-    name=vehicle + '_libs',
-    ap_vehicle=vehicle,
-    ap_libraries=bld.ap_common_vehicle_libraries() + [
-        'AC_AttitudeControl',
-        'AC_InputManager',
-    …
-        'AP_KDECAN',
-        'AP_SurfaceDistance',
-        'vl53l1x_api',     			<-- ADD THIS
-    ],
-)
-```
-The compiler will now properly link the 3rd party API with our updated driver. Calling functions, accessing classes, etc. is now possible. 
 ## Compiling & Flashing to the Crazyflie
 Before using the new range finder driver in ArduPilot, we need to compile the custom firmware and flash it the Crazyflie. For detailed flashing instructions, please reference the [Compiling & Flashing Guide](/docs/compiling_and_flashing.md).
 
@@ -143,7 +33,7 @@ Build failed -> task in 'bin/arducopter' failed (exit status 1)
 Chances are you have exceeded the memory limit. Please reference the [Freeing up Memory Guide](/docs/freeing_up_memory.md) for detailed instructions on how to minimize the build size.
 
 ## Testing and Using ToF
-Once you have successfully flashed your custom firmware with range finders enabled, using the flow deck is relatively simple. Start by changing the parameter “RNGFNDX_TYPE” from 0 to 16 upon startup of your drone.
+Once you have successfully flashed your custom firmware with range finders enabled, using the flow deck is relatively simple. Start by changing the parameter “RNGFNDX_TYPE” from 0 to 50 upon startup of your drone. Type 50 is the FlowDeck backend; do not use 16, which is the unrelated VL53L0X driver and is not compiled into this build.
 
 After changing the parameter value and saving it to memory, restart the system by either cutting power to the drone directly or sending a reboot command through MAVLink.
 

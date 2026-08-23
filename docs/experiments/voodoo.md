@@ -1,4 +1,10 @@
 # Voodoo Experiment Guide
+
+> **Note:** the AI deck image for this experiment predates the 2026.08.22
+> release and is not among its published assets, which ship the current swarm
+> demos instead. Build it from the `aideck-firmware-cus` submodule, or use an
+> earlier release, if you want to reproduce this experiment as originally run.
+
 ## Overview
 The Voodoo experiment is a multi-drone, leader–follower demonstration that validates ArduSwarm’s decentralized P2P command pipeline. A stationary Leader drone (disarmed, held by hand) broadcasts its attitude over the nRF51 P2P link, while flying Follower drone(s) interpret those broadcasts as discrete horizontal velocity commands (position targets) using the AI Deck as a “virtual pilot.”
 
@@ -16,8 +22,8 @@ At a high level:
 - A Ground Control Station (GCS) of your choice (we use QGroundControl)
 - The ArduSwarm Python WiFi telemetry bridge (same as [first flight](/docs/first_flight.md))
 - The provided firmware from this repo:
-    - [Voodoo AI Deck firmware](/docs/compiled_firmware/aideck/voodoo)
-    - [ArduPilot firmware](/docs/compiled_firmware/ardupilot)
+    - Voodoo AI Deck firmware
+    - [ArduPilot firmware](https://github.com/kwakurichter/ArduSwarm/releases)
     - QGC [actions](/python/actions.json) file for custom actions
 - Indoor flight space requirements are the same as [first flight](/docs/first_flight.md):
     - Good lighting
@@ -26,11 +32,11 @@ At a high level:
 
 ## Step 1 — Flash required firmware
 ### Flash the AI Deck with Voodoo firmware
-Flash the AI Deck with the [Voodoo experiment firmware](/docs/compiled_firmware/aideck/voodoo) provided in this repository.
+Flash the AI Deck with the Voodoo experiment firmware provided in this repository.
 - Follow the repo’s [Companion Computer Guide](/docs/companion_computer_guide.md).
 
 ### Flash the Leader drone with Leader ArduPilot
-Flash the Leader and Follower(s) STM32 flight controller with the [ArduPilot build](/docs/compiled_firmware/ardupilot/brushless/cf2_bl.hex) provided in this repository.
+Flash the Leader and Follower(s) STM32 flight controller with the [ArduPilot build](https://github.com/kwakurichter/ArduSwarm/releases) provided in this repository.
 - Follow the repo’s [Compiling & Flashing Guide](/docs/compiling_and_flashing.md).
 - This build enables the leader to broadcast its attitude via the nRF51 P2P pipeline at ~10 Hz
 

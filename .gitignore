@@ -1,0 +1,21 @@
+# Compiled firmware is distributed via GitHub Releases, not tracked in-tree.
+# See the release assets for flashable images.
+firmware/
+
+# Build intermediates, wherever they land
+*.o
+*.d
+*.map
+BUILD/
+
+# macOS
+.DS_Store
+
+# Working notes used as source material for docs/development/.
+# Kept locally, not published — the published guides supersede them.
+/AGENT_GUIDE.md
+/ARDUPILOT_PORT_GUIDE.md
+/CRAZYFLIE_PORT_GUIDE.md
+/COMPANION_INTEGRATION.md
+/ardupilot-integration.md
+/swarmmesh.md

@@ -47,6 +47,12 @@ Install STM32CubeProgrammer and open it before moving on to the next step.
 ![STM32CubeProgrammer](/docs/images/quick_start_guide/stm32programmer.png)
 
 ## Flashing the Firmware
+### Download a release
+Every image referenced below is published on the [Releases page](https://github.com/kwakurichter/ArduSwarm/releases). Download a single release and use its images throughout — do not mix images from different releases.
+
+This matters more than it used to. The STM32, nRF51, and Crazyradio firmware negotiate a 252 byte radio packet size, so all three have to agree. A mismatched set will flash successfully and then fail to communicate at all.
+
+### Order of operations
 Flashing all of the required firmware must be done according to a strict order of operations. This is because the ArduSwarm firmware is inter-dependant and certain hardware - the AI Deck and the secondary NRF51 MCU (Micro-Controller Unit) - require Bitcraze tools to flash.
 
 If your Crazyflie drone has previously been flashed with ArduPilot, please reference the [Restoring the Crazyflie](/docs/restoring_the_crazyflie.md) guide before proceeding.
@@ -59,7 +65,7 @@ To flash the firmware on the AI deck, please reference the [Companion Computer G
 ### NRF51 Secondary MCU
 The NRF51 is the secondary MCU which is located on the base Crazyflie drones. It handles secondary tasks such as communication via 2.4 GHz radio and power management. To enable P2P (Peer-to-Peer) communication between drones for swarming and battery state updates within ArduSwarm, we need to flash a custom version of the official Bitcraze firmware onto the NRF51.
 
-You can find a pre-compiled version of this firmware [here](/docs/compiled_firmware/nrf51/cf2_nrf.bin).
+You can find a pre-compiled version of this firmware (`cf2_nrf.bin`) on the [Releases page](https://github.com/kwakurichter/ArduSwarm/releases).
 
 - Start by disconnecting the AI Deck from your drone.
 
@@ -91,7 +97,7 @@ The STM32 is the main MCU on the Crazyflie drones which functions as the flight 
 
 The final software piece of the platform is to flash the STM32 with a custom version of ArduPilot which supports ArduSwarm.
 
-A pre-compiled version of this firmware can be found [here](/docs/compiled_firmware/ardupilot/arducopter_with_bl.hex).
+A pre-compiled version of this firmware (`crazyflie2-ArduSwarm-*_with_bl.hex`, or the `_bl` variant for brushless) can be found on the [Releases page](https://github.com/kwakurichter/ArduSwarm/releases).
 
 ***Prepare the Crazyflie for Flashing***
 
@@ -128,6 +134,16 @@ With STM32CubeProgrammer open and the Crazyflie in bootloader mode, we start by 
 Your Crazyflie drone is now flashed with ArduPilot. Note that flashing the drone with ArduPilot does not affect the NRF51 firmware we flashed previously.
 
 If you need to restore the Crazyflie to the factory Bitcraze firmware for any reason, follow the instructions in the [Restoring the Crazyflie Guide](/docs/restoring_the_crazyflie.md).
+
+### Crazyradio 2.0 Dongle
+Finally, the ground-station side of the radio link needs the matching firmware.
+A Crazyradio 2.0 running the stock Bitcraze firmware cannot exchange 252-byte
+packets and will not connect to an ArduSwarm drone.
+
+Download `crazyradio2.uf2` from the same release, put the dongle into bootloader
+mode so it mounts as a USB drive, and copy the file across. Full instructions,
+including how to connect to two drones at once, are in the
+[Crazyradio Dongle Guide](/docs/crazyradio_dongle.md).
 
 ## Next Steps
 Now that all of the ArduSwarm firmware is installed, we can move on to flight testing. Re-assemble the drone according to the [Hardware Setup](/docs/hardware_setup.md) guide.

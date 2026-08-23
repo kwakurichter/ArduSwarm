@@ -27,7 +27,7 @@ Connect your PC to AiDeckDebugAP.
 Once connected, your PC is on the same network as the AI Deck and ready to receive forwarded telemetry.
 
 ### Step 2 - Start the Python telemetry bridge
-Run the Python [script](../python/mavbridge.py) provided in this repository. The script should immediately begin forwarding the drone’s telemetry stream over UDP to port 14550.
+Run the Python bridge [script](../python/mavlink_bridge.py) provided in this repository. It polls the drone through the Crazyradio and forwards its telemetry over UDP to port 14550. See the [Custom GCS Guide](custom_gcs_guide.md) for the full invocation and for connecting more than one drone.
 
 Once running, you should see messages indicating packets are being received and forwarded.
 

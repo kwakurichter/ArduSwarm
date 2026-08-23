@@ -32,13 +32,21 @@ A significant portion of this project has been dedicated to overcoming the limit
 This platform is designed to meet the demands of advanced swarm robotics research, with a focus on the following requirements:
 
 - **Peer-to-Peer Communication**: Enables drones to relay state updates and commands directly to each other.
+- **Decentralized Mesh Networking**: `AP_SwarmMesh` provides multi-hop routing between peers with no central coordinator, so messages reach drones outside direct radio range.
 - **Infrastructure-free Localization**: Utilizes the Flow Deck with its optical flow and Time-of-Flight (ToF) sensors for indoor navigation.
-- **Relative Positioning**: Allows drones to be aware of their peers' positions for collision avoidance and formation control.
+- **Relative Positioning**: Allows drones to be aware of their peers' positions for collision avoidance and formation control. `AP_Ranging` measures true peer-to-peer distance using the Loco Positioning Deck.
 - **Robustness & Scalability**: Designed to perform reliably in various conditions and to scale from a few drones to dozens.
 - **Ease of Use**: Aims to provide a straightforward user experience, regardless of their hardware or software expertise.
 - **Open Source**: Both the hardware and software are fully open-source, promoting collaboration.
 - **Onboard Computation**: Capable of running higher-order algorithms directly on the drone.
 - **Detailed Logging**: Flight recording enables detailed post-flight analysis using existing ArduPilot tools.
+
+## 📦 Firmware Releases
+Prebuilt, flashable firmware for every component is published on the [Releases page](https://github.com/kwakurichter/ArduSwarm/releases). Each release bundles the STM32 (ArduPilot) images, the nRF51 image, the Crazyradio 2.0 dongle image, and the Ai Deck images.
+
+The radio components are version coupled: the 252 byte MTU requires matching STM32, nRF51, and Crazyradio firmware. Flash all three from the same release and in order, rather than upgrading them piecemeal.
+
+If you only want to fly, download a release and follow the [Quick Start Guide](docs/quick_start_guide.md) — you do not need to build anything from manually source.
 
 ## 🛠️ Getting Started
 This section provides a guide to setting up a Crazyflie drone with the custom ArduPilot and Bitcraze firmware developed for this project.
@@ -67,60 +75,70 @@ For indoor navigation, you will need to enable the optical flow and rangefinder 
 4. **Enabling Radio Communication**
 To enable peer-to-peer communication and to connect to a Ground Control Station, the Crazyflie's radio system must be configured. 
 
-    This is a two-part process involving the secondary nRF51 radio MCU and the main STM32 flight controller. 
+    This is a three-part process involving the secondary nRF51 radio MCU, the main STM32 flight controller, and the Crazyradio dongle on your ground station. 
 
     **First**, the nRF51 MCU must be flashed with a modified firmware. Please reference the [Flashing the NRF Guide](docs/flashing_the_nrf.md).
 
-    **Second**, a MAVLink-to-Syslink translation driver must be enabled in the ArduPilot firmware. Please reference the [CrazyRadio Guide](docs/crazyradio.md).
+    **Second**, the `AP_Syslink` driver must be enabled in the ArduPilot firmware. Please reference the [CrazyRadio Guide](docs/crazyradio.md).
 
-    Note that this driver is still in active development. Currently, you will need to use a custom Ground Control Station to use the new radio driver ([Custom GCS Guide](docs/custom_gcs_guide.md)).
+    **Third**, to reach the drones from a ground station you will need a Crazyradio 2.0 running the ArduSwarm dongle firmware. Please reference the [Crazyradio Dongle Guide](docs/crazyradio_dongle.md).
 
-5. **Brushless Motor Support**
+5. **Swarm Mesh Networking**
+`AP_SwarmMesh` turns the peer-to-peer radio into a decentralized multi-hop mesh, letting drones relay messages for each other without a central coordinator.
+
+    To enable and configure the mesh, please see the [Swarm Mesh Guide](docs/swarm_mesh.md).
+
+6. **Peer Ranging (Loco Positioning Deck)**
+If you have Loco Positioning Decks, `AP_Ranging` measures true distance between drones using the DWM1000 ultra-wideband (UWB) radio.
+
+    To enable ranging, please see the [Ranging Guide](docs/ranging.md).
+
+7. **Brushless Motor Support**
 If you are using the newer Crazyflie 2.1 Brushless drones, you will need to update the motor driver before flying. If you are using the standard Crazyflie 2.1 hardware, skip this step.
 
     For detailed instructions, please refer to the [Brushless Motor Guide](docs/brushless_motor_guide.md).
 
-6. **Using Lua Scripting for Custom Behavior**
+8. **Using Lua Scripting for Custom Behavior**
 Lua scripting allows you to add custom logic to the drone's behavior without modifying the core ArduPilot firmware. This is ideal for implementing and testing new algorithms.
 
     To get started with Lua scripting on the Crazyflie, please see the [Lua Scripting Guide](docs/lua_scripting.md).
 
-7. **Logging Setup**
+9. **Logging Setup**
 Logging is an essential tool for performance tuning, analyzing failures, and mission history. 
 
     To enable logging on the Crazyflie, please see the [Logging Guide](docs/logging_guide.md).
 
-8. **Notch Filtering Setup**
+10. **Notch Filtering Setup**
 FFT (Fast Fourier Transform) based notch filtering is a useful tool which allows us to target and attenuate unwanted IMU (Inertial Measurement Unit) disturbances to improve stability while minimizing performance loss.
 
     To enable notch filtering on the Crazyflie, please see the [Notch Filtering Guide](docs/notch_filtering_setup.md).
 
-9. **Battery Monitor Setup**
+11. **Battery Monitor Setup**
 Battery state updates are a critical function for autonomous flight. Without battery data, drones are at risk of catastrophic failure and unstable flight. The battery monitor driver enables battery state updates.
 
     Please reference the [Battery Monitor Setup Guide](docs/battery_monitor.md) for detailed instructions.
 
-10. **Enable Companion Computer (AI Deck)**
+12. **Enable Companion Computer (AI Deck)**
 A companion computer vastly expands the capabilities of the ArduSwarm platform. Using the AI deck, the user is able to connect to a Ground Control Station over WiFi via a full telemetry stream.
 The AI deck also enables the user to write and deploy custom scripts which can facilitate autonomous missions, onboard machine learning, computer vision, etc.
 
     To enable the AI deck on the ArduSwarm platform, please see the [Companion Computer Guide](docs/companion_computer_guide.md).
 
-11. **Motion Capture Localization Support**
+13. **Motion Capture Localization Support**
 If you have access to a motion capture system for external ground truth localization, you can enable mocap instead of flow-based localization. 
 Note that this will require a constant connection to a central ground station to each drone, as well as our 3D printed custom guard to mount passive reflective markers.
 
     Please reference the [Motion Capture Setup Guide](docs/motion_capture_guide.md) for detailed instructions.
 
-12. **Pre-Flight Checklist**
+14. **Pre-Flight Checklist**
 The pre-flight checklist is a critical final check to make sure your first flight doesn't end in disaster!
 
     Before attempting your first flight, be sure to check the [Pre-Flight Checklist](docs/pre_flight_checklist.md).
 
-13. **First Flight**
+15. **First Flight**
 Before attempting automated flight, follow the [First-Flight Guide](docs/first_flight.md) to fly each drone in manual mode to make sure you've setup the drone correctly.
 
-14. **Using the API for Custom Automation**
+16. **Using the API for Custom Automation**
 [Placeholder]
 
 ## 💻 Development Notes
@@ -135,9 +153,22 @@ If you need to revert the Crazyflie to its original Bitcraze firmware for any re
 For step-by-step instructions, please see the [Restoring the Crazyflie Guide](docs/restoring_the_crazyflie.md).
 
 ### ArduPilot Support
-All of the development work detailed in this project is based on ArduPilot ArduCopter version 4.6.3 (Nov 2025). This project is not yet officially supported by ArduPilot and thus is not maintained to the latest release of ArduCopter. As a result, functionality is not guaranteed for future releases.
+All of the development work detailed in this project is based on ArduPilot ArduCopter version 4.7.0. This project is not yet officially supported by ArduPilot and thus is not maintained to the latest release of ArduCopter. As a result, functionality is not guaranteed for future releases.
 
 If you attempt to port this work to more recent versions of ArduPilot and run into compilation errors due to depreciation issues, please revert back to this [repository](https://github.com/kwakurichter/ArduPilot_cus).
+
+### Custom ArduPilot Libraries
+The ArduSwarm work is mainly packaged as three self contained libraries in the [ArduPilot_cus](https://github.com/kwakurichter/ArduPilot_cus) fork:
+
+| Library | Purpose |
+|---|---|
+| `AP_Syslink` | nRF51 radio driver carrying MAVLink telemetry and P2P broadcast streams over Syslink |
+| `AP_SwarmMesh` | Decentralized peer-to-peer mesh networking with multi-hop routing |
+| `AP_Ranging` | DWM1000 ultra-wideband peer ranging via the Loco Positioning Deck |
+
+`AP_SwarmMesh` has been proposed upstream as [ArduPilot PR #33881](https://github.com/ArduPilot/ardupilot/pull/33881).
+
+Additionally, there are several patches required - see the [port overview doc](/docs/development/port_overview.md).
 
 ## 🔮 Future Work
 This platform provides a foundation for a wide range of swarm robotics research. Future work will include:
@@ -145,7 +176,8 @@ This platform provides a foundation for a wide range of swarm robotics research.
 - Implementing and testing specific differential game-based defensive algorithms.
 - Polish stability/throttle/position controller gain tune.
 - Developing a user-friendly interface for managing swarm experiments.
-- Implementing a relative positioning algorithm for robust collision avoidance.
+- Fusing `AP_Ranging` distance estimates into a full relative position solution for robust collision avoidance.
+- Upstreaming `AP_SwarmMesh` into mainline ArduPilot.
 
 ## ✍️ Author
 **Kwaku Richter**, Masters Student in Mechanical Engineering at the University of Ottawa
@@ -154,4 +186,4 @@ This platform provides a foundation for a wide range of swarm robotics research.
 
 ---
 
-**Last Modified:** 2026-05-08
+**Last Modified:** 2026-08-22

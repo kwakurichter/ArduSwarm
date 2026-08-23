@@ -1,4 +1,10 @@
 # Path Tracking Experiment Guide
+
+> **Note:** the AI deck image for this experiment predates the 2026.08.22
+> release and is not among its published assets, which ship the current swarm
+> demos instead. Build it from the `aideck-firmware-cus` submodule, or use an
+> earlier release, if you want to reproduce this experiment as originally run.
+
 ## Overview
 The Tracking experiment is a single-drone validation flight used to benchmark infrastructure-free localization on ArduSwarm. The drone executes, closed-loop “square-like” maneuver using position targets, while logging its onboard EKF position estimate (from IMU + optical flow + ToF) to the SD card for later analysis against OptiTrack ground truth.
 
@@ -17,7 +23,7 @@ The Tracking experiment is a single-drone validation flight used to benchmark in
 
 ## Step 1 — Flash the Tracking experiment firmware (AI Deck)
 To run the experiment, you first need the AI Deck firmware build that contains the Tracking experiment mission script.
-1. Flash the AI Deck with the [trajectory firmware](/docs/compiled_firmware/aideck/trajectory).
+1. Flash the AI Deck with the trajectory firmware.
 2. Follow the repo’s [Companion Computer Guide](/docs/companion_computer_guide.md) for exact flashing instructions.
 
 The flight controller (STM32 running ArduPilot/ArduCopter) should already be on your ArduSwarm build that passed First Flight.
@@ -82,7 +88,7 @@ This produces a square trajectory driven by the platform’s position controller
 ### 6.1 Retrieve the onboard log
 After the drone lands and disarms:
 - Download the onboard log from the SD card (method depends on your SD deck workflow / tooling in this repo).
-- (Optional) Use the provided [MATLAB script](/python/path_tracking.m) to compute Root-Mean-Squared Error (RMSE) of optical flow based position estimates vs. OptiTrack Ground truth.
+- (Optional) Compute Root-Mean-Squared Error (RMSE) of optical-flow-based position estimates against OptiTrack ground truth. The MATLAB script used for this (`path_tracking.m`) is no longer in the repository; recover it from git history if you need it.
 
 This experiment is meant to highlight drift accumulation in dead-reckoning and validate the stability of the optical flow driver tuning.
 

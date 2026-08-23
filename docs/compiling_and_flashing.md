@@ -12,13 +12,24 @@ https://ardupilot.org/dev/docs/building-setup-linux.html
 MacOS:
 https://ardupilot.org/dev/docs/building-setup-mac.html
 
+## Getting the Source
+The ArduSwarm ArduPilot port lives in [ArduPilot_cus](https://github.com/kwakurichter/ArduPilot_cus) and is included here as a submodule. If you cloned this repository without submodules, fetch them now:
+
+```
+git submodule update --init --recursive
+```
+
+The fork is based on **ArduCopter 4.7.0** and already contains the ArduSwarm libraries — `AP_Syslink`, `AP_SwarmMesh`, and `AP_Ranging`.
+
+If you do not need to modify the firmware, skip this guide entirely and download a prebuilt image from the [Releases page](https://github.com/kwakurichter/ArduSwarm/releases).
+
 ## Compiling the Firmware
 Once you have setup your build environment and have customized the firmware we can move on to compiling the firmware. 
 - Start by opening a terminal.
 - If you are using a virtual environment, ensure your Python interpreter has access to the required prerequisites.
-- Navigate to your custom ardupilot repository:
+- Navigate to the ArduPilot submodule:
 ```
-path\...\ardupilot
+path\...\ArduSwarm\submodules\ArduPilot_cus
 ```
 - It is good practice to clean your build objects at this time (in case some submodules have been updated):
 ```
@@ -29,7 +40,9 @@ path\...\ardupilot
 ```
 ./waf configure --board crazyflie2 BL=1
 ```
-As an aside, it is crucial that you compile your firmware with a bootloader (the “BL=1” part in the above line) so we can easily re-flash the Crazyflie with new firmware or restore the Crazyflie to factory settings if necessary.
+
+If you are building for the Crazyflie 2.1 Brushless, configure against its own board target instead of `crazyflie2` — see the [Brushless Motor Guide](/docs/brushless_motor_guide.md).
+
 - Finally, build ArduCopter:
 ```
 ./waf copter
@@ -53,7 +66,7 @@ The most robust way to flash custom firmware onto a Crazyflie drone is to manual
 
 - Navigate to the build folder of your custom ArduPilot repository:
 ```
-path\...\ardupilot\build\crazyflie2\bin
+path\...\ArduSwarm\submodules\ArduPilot_cus\build\crazyflie2\bin
 ```
 - The build we want should match the following:
 

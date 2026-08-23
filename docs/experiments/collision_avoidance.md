@@ -1,4 +1,10 @@
 # Collision Avoidance Experiment Guide
+
+> **Note:** the AI deck image for this experiment predates the 2026.08.22
+> release and is not among its published assets, which ship the current swarm
+> demos instead. Build it from the `aideck-firmware-cus` submodule, or use an
+> earlier release, if you want to reproduce this experiment as originally run.
+
 ## Overview
 The Collision Avoidance experiment is a two-drone proof-of-concept that validates ArduSwarm's peer-awareness and basic reactive avoidance capability. One drone (the flyer) takes off and holds a fixed hover position. A second drone (the probe) remains disarmed and is carried by hand toward the flyer. The flyer listens continuously for P2P packets from the probe, measures the received signal strength (RSSI) of those packets as a proximity proxy, and reacts when the probe enters a configurable close-approach threshold (climbing ~25 cm to avoid a potential collision). Once the probe has been absent from the vicinity for a set dwell period, the flyer descends back to its original hover altitude.
 
@@ -18,8 +24,8 @@ At a high level:
 - A Ground Control Station (GCS) of your choice (we use QGroundControl)
 - The ArduSwarm Python WiFi telemetry bridge (same as [first flight](/docs/first_flight.md))
 - The provided firmware from this repo:
-    - [Collision Avoidance AI Deck firmware](/docs/compiled_firmware/aideck/collision_avoidance)
-    - [ArduPilot firmware](/docs/compiled_firmware/ardupilot)
+    - Collision Avoidance AI Deck firmware
+    - [ArduPilot firmware](https://github.com/kwakurichter/ArduSwarm/releases)
     - QGC [actions](/python/actions.json) file for custom actions
 - Indoor flight space requirements are the same as [first flight](/docs/first_flight.md):
     - Good lighting
@@ -28,11 +34,11 @@ At a high level:
 
 ## Step 1 — Flash required firmware
 ### Flash the AI Deck with Collision Avoidance firmware
-Flash the Flyer's AI Deck with the [Collision Avoidance experiment firmware](/docs/compiled_firmware/aideck/collision_avoidance) provided in this repository.
+Flash the Flyer's AI Deck with the Collision Avoidance experiment firmware provided in this repository.
 - Follow the repo's [Companion Computer Guide](/docs/companion_computer_guide.md).
 
 ### Flash both drones with ArduPilot firmware
-Flash both the flyer and probe STM32 flight controllers with the [ArduPilot build](/docs/compiled_firmware/ardupilot) provided in this repository.
+Flash both the flyer and probe STM32 flight controllers with the [ArduPilot build](https://github.com/kwakurichter/ArduSwarm/releases) provided in this repository.
 - Follow the repo's [Compiling & Flashing Guide](/docs/compiling_and_flashing.md).
 - The probe only needs to broadcast P2P rssi packets, it does not fly.
 

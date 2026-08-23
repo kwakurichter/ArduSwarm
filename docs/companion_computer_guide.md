@@ -34,6 +34,21 @@ Writing custom automation scripts is the heart of the ArduSwarm project. The Ard
 
 Please reference the [Using the API for Custom Automation](/docs/using_the_api_for_custom_automation.md) guide for detailed instructions of the development process.
 
+## Available AI Deck Firmware
+The [aideck-firmware-cus](https://github.com/kwakurichter/aideck-firmware-cus) submodule provides the GAP8 applications used by ArduSwarm. Prebuilt images for the swarm demos are published on the [Releases page](https://github.com/kwakurichter/ArduSwarm/releases) as `aideck-<variant>.img`:
+
+| Image | Behaviour |
+|---|---|
+| `aideck-swarm_coordinated.img` | Coordinated swarm flight across all participating drones |
+| `aideck-swarm_cross.img` | Cross formation manoeuvre |
+| `aideck-swarm_guided_takeoff.img` | Synchronized GUIDED mode takeoff |
+| `aideck-swarm_leader_follower.img` | One drone leads, the others follow |
+
+These scripts are built on the mesh and ranging work in this release. A drone's AI deck can consume live peer telemetry and range data directly, without going through a ground station, by pointing the forwarding parameters at the AI deck's serial port:
+
+- `P2P_FWD_PORT` forwards peer MAVLink messages from the mesh — see the [Swarm Mesh Guide](swarm_mesh.md).
+- `RNG_FWD_PORT` forwards the UWB peer range table as MAVLink `TUNNEL` messages — see the [Ranging Guide](ranging.md).
+
 ## Flashing AI Deck
 To flash firmware to the AI Deck, we need to use the Bitcraze provided tools for over the air flashing. This process requires the use of a Crazyflie drone flashed with the default Bitcraze firmware, a computer with the Bitcraze python library installed, and a [PA radio dongle](https://www.bitcraze.io/products/crazyradio-pa/).
 
@@ -59,9 +74,9 @@ Once all of the above prerequisite requirements have been met, we can flash our 
 - Open a command terminal and navigate to the environment where the Bitcraze python library is located (if you installed the library in a python environment).
 
 - In the command terminal, enter the following command:
-'''
+```
 cfclient
-'''
+```
 
 - The Bitcraze client application should open. 
 
@@ -81,12 +96,12 @@ cfclient
 
 - Close the Bitcraze application.
 
-- Find the local copy of your AI deck firmware. If you wish to use pre-compiled firmware, please download [here](/docs/compiled_firmware).
+- Find the local copy of your AI deck firmware. If you wish to use pre-compiled firmware, download the `aideck-*.img` image you want from the [Releases page](https://github.com/kwakurichter/ArduSwarm/releases).
 
 - In the terminal, enter the following command to flash the AI deck over the air:
-'''
+```
 cfloader flash {path/to/your/local/firmware}/target.board.devices.flash.img deck-bcAI:gap8-fw -w radio://0/100/2M/E7E7E7E706
-'''
+```
 
 Where the radio should match the channel, bandwidth, and address of your specific drone.
 
@@ -100,52 +115,19 @@ Now that the AI deck is flashed with custom firmware, we can use it within the A
 ### Setup
 Once you have attached the AI deck to your Crazyflie which has ArduPilot flashed on it, power on the drone and connect the drone to a GCS. Update the following parameters:
 
-'''
+```
 SERIAL1_PROTOCOL 2
 SERIAL1_BAUD     115
-SERIAL2_PROTOCOL 2
-SERIAL2_BAUD     1000
-SERIAL3_PROTOCOL 2
-'''
+```
 
 Reset the drone by powering the Crazyflie on/off. The Crazyflie should now be able to communicate with the AI deck over serial.
 
-### Telemetry Link
-If you flashed the [mavbridge firmware](/docs/compiled_firmware/ai_deck/mavbridge/) onto the AI deck to use the AI deck as a telemetry link, there are a couple extra steps to get telemetry working with your GCS of choice.
-
-- Open your GCS of choice (ex. QGroundControl).
-
-- Open the connection settings in your GCS.
-
-![GCS WiFi Settings](/docs/images/companion_computer_guide/gcs-settings.png)
-
-- Create a new connection link with the following parameters:
-
-![GCS UDP Setup](/docs/images/companion_computer_guide/gcs-wifi.png)
-
-Next, download a local copy of the [mavbridge python script](/docs/python/mavbridge.py). This script will forward the telemetry link being sent over WiFi from the AI deck to your GCS.
-
-Next, connect to the WiFi network "AIDeckDebugAP".
-
-- Then, run the python script through a command terminal with the following command:
-'''
-python /path/to/local/copy/mavbridge.py
-'''
-
-Note that this script requires the following python libraries as prerequisites:
-- socket
-- struct
-- threading
-- time
-
-Finally, open your GCS of choice. If you set up the UDP connection correctly, the GCS should automatically connect to your Crazyflie's telemetry stream. You can now use the drone regularly in ArduPilot.
-
 ### Custom Mission
-If you flashed a custom mission onto the AI deck (ex. [voodoo](/docs/compiled_firmware/ai_deck/voodoo/)), using the AI deck depends on how you have configured your custom firmware.
+If you flashed a custom mission onto the AI deck (for example one of the swarm demos), using the AI deck depends on how you have configured your custom firmware.
 
 Most firmware use the wifi_mission_control() function to manage the mission through user commands over WiFi. To use this firmware, we need to connect to the WiFi access point created by the AI deck and send commands.
 
-First, download a local copy of the [WiFi Command python script](/python/wifi_command.py). This script will connect send user commands to the AI deck and receive messages sent by the AI deck.
+First, obtain a local copy of the WiFi command script (`wifi_command.py`) from the [aideck-firmware-cus](https://github.com/kwakurichter/aideck-firmware-cus) submodule. This script sends user commands to the AI deck and receives messages sent back by it.
 
 Next, connect to the WiFi network "AIDeckDebugAP".
 
