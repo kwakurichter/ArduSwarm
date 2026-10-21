@@ -1,14 +1,14 @@
 # Port Overview — Crazyflie → ArduPilot
 
 - **Repo:** [kwakurichter/ArduPilot_cus](https://github.com/kwakurichter/ArduPilot_cus)
-- **Base:** ArduCopter **4.7.0** · **Release:** v2.1.1 (`d99bf3b057`)
+- **Base:** ArduCopter **4.7.2** · **Release:** ArduSwarm v2.2.2 (`e745352bfc`), verified on `ArduPilot_cus` **master**
 - **Hardware:** Crazyflie 2.x, STM32F405, 1 MB flash, 192 KB RAM
 
 ---
 
 ## 1. What this port is
 
-Stock ArduPilot Copter 4.7.0 plus four new libraries and a set of board-specific changes, producing firmware for a 27 g indoor quadrotor that navigates without GPS and talks to its neighbours over its onboard radio.
+ArduPilot Copter 4.7.2 plus four new libraries and a set of changes, producing firmware for a 27 g indoor quadrotor that navigates without GPS and talks to its neighbours over its onboard radio.
 
 | Board | Frame | Notes |
 |---|---|---|
@@ -66,6 +66,12 @@ Both are driven by in-tree `FlowDeck` backends, *not* upstream's `Pixart` or `VL
 Both backends do their bus I/O on a periodic bus thread callback, never in `update()`. `read_rangefinder` has a 100 µs scheduler budget and one ST-API sample is milliseconds of blocking I2C.
 
 ---
+
+## Ground Control Station execution
+
+The current `swarm_hub.py` owns radio links, relays MAVLink to QGC, and runs `guided_swarm.py` missions on demand for 1 to 4 drones. This moves custom experiment logic to the GCS computer without requiring onboard Lua or an AI Deck. 4 drone operation uses two dongles on separate channels; it does not bridge P2P mesh traffic between the channels.
+
+The v2.2.2 release includes the shared SPI deck startup fix, Flow Deck sample validity/timing and timeout recovery overhaul, optional diagnostics, increased brushless I2C thread priority, and a calibrated brushless thrust model. The brushless board also enables MMC5983MA external compass support and ExternalNav support. Its Loco deck uses PC10 for reset and PC11 for IRQ, reserving those pins from USART3 (`SERIAL1` is empty); check the selected board definition before connecting a serial companion. See [release notes](../release_notes.md) for source and [GCS setup](../custom_gcs_guide.md) for the runnable workflow.
 
 ## 4. Build and flash
 

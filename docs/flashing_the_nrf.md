@@ -21,12 +21,18 @@ https://www.bitcraze.io/documentation/repository/crazyflie2-nrf-firmware/master/
 ## What the Custom Firmware Changes
 Earlier versions of this guide walked through manually editing the Bitcraze sources. Those edits are now maintained in `nrf-firmware-cus`, so you no longer need to apply them yourself. For more details, see [the AP_Syslink doc](/docs/development/ap_syslink.md).
 
+### Version for this update
+
+The firmware baseline is **nRF51 v2.0.0** (`6a34d0e`). It carries opaque MAVLink chunks over 252-byte ESB packets, reports transmit queue space, and adds die temperature to battery state telemetry. BLE support is removed in this build to recover RAM. The bootloader retains the legacy radio format for recovery with stock tools.
+
+The newer host tooling through `dc31d919` adds shared radio frame handling, diagnostics, slow polling of absent drones, and dongle recovery; these are Python tool changes after the nRF firmware tag. Use the complete bundled `python/` set with Crazyradio **v1.0.1**. See the [release notes](release_notes.md) and [GCS guide](custom_gcs_guide.md).
+
 ### Simultaneous telemetry and P2P
-The combined effect of the new drievr is that the nRF51 can carry an ArduPilot telemetry stream and P2P broadcasts at the same time, rather than being dedicated to one or the other. The two streams are tagged with distinct Syslink types and interleaved on the same radio link.
+The combined effect of the new driver is that the nRF51 can carry an ArduPilot telemetry stream and P2P broadcasts at the same time, rather than being dedicated to one or the other. The two streams are tagged with distinct Syslink types and interleaved on the same radio link.
 
 The available MTU has also been raised to 252 bytes, up from the original 31 byte CRTP payload. Most MAVLink messages now fit in a single packet, removing the fragmentation and reassembly round trip that previously added latency and dropped messages under load.
 
-Because the packet size is negotiated across the whole radio path, the matching [Crazyradio dongle firmware](crazyradio_dongle.md) and STM32 build are required.
+Because every application component must support the same packet format, the matching [Crazyradio dongle firmware](crazyradio_dongle.md) and STM32 build are required.
 
 ## Compiling and Flashing
 Once you have setup your build environment, we can move on to compiling and flashing the firmware.
@@ -61,8 +67,6 @@ make clean
 ```
 make cload
 ```
-
-![Flashing the NRF](/docs/images/flashing_the_nrf/flashing.png)
 
 - After the firmware is finished flashing, the Crazyflie should automatically reboot.
 

@@ -18,3 +18,7 @@ We now need to compile the brushless firmware and flash it the Crazyflie. For de
 Once you have successfully flashed your brushless firmware, we can use the brushless Crazyflies in the ArduSwarm platform. If you haven't yet configured the rest of the hardware, reference the [Hardware Setup Guide](hardware_setup.md) to properly assemble your ArduSwarm drone.
 
 If you have already completed the hardware setup, you can move directly to the [Pre-Flight Checklist](pre_flight_checklist.md).
+
+## Cubic thrust model in v2.2.2
+
+The v2.2.2 adds a calibrated cubic thrust model for the stock Crazyflie 2.1 Brushless motor/propeller/ESC combination. It is compiled into `crazyflie2_bl`, and can be selected by setting `MOT_THST_MODEL=1`. The generic library default is `0` (the existing exponential model).

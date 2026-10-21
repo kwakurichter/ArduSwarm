@@ -2,7 +2,7 @@
 ArduSwarm is very much still in active development and thus there are some quirks with the platform which should be tested manually before attempting any of the more advanced autonomous modes.
 ## Purpose
 Before attempting autonomous modes or swarming, every ArduSwarm drone should complete a short, controlled manual first-flight. The goal is to verify that:
-- Telemetry and command links are stable (WiFi → Python bridge → GCS)
+- Telemetry and command links are stable (Crazyradio 2.0 → Python hub → GCS)
 - Manual control via joystick works correctly
 - Critical sensors are functioning (optical flow + ToF rangefinder)
 - Logging is working (SD card deck)
@@ -15,38 +15,32 @@ This procedure is intentionally simple: take off in STABILIZE, transition to LOI
 - Pre-flight checklist completed for the individual drone
 - A Ground Control Station (GCS) of your choice (we use QGroundControl (QGC) in this guide)
 - A joystick/gamepad supported by your GCS
-- The provided ArduSwarm Python telemetry bridge script
+- The provided ArduSwarm Python hub and radio tools
 
-### Step 1 - Connect to the AI Deck WiFi Access Point
-1. Power on the drone.
-2. Wait for the AI Deck WiFi access point to appear:
-3. SSID: AiDeckDebugAP
+### Step 1 - Connect the Crazyradio
+Connect a Crazyradio 2.0 running v1.0.1 and power on one configured drone. Check its `MAV_SYSID` and channel against the URI you will use. This first flight workflow does not require an AI Deck.
 
-Connect your PC to AiDeckDebugAP.
+### Step 2 - Start the Python hub
+After installing the dependencies in the [GCS guide](custom_gcs_guide.md), run from the repository root (example: system 1 on channel 80):
 
-Once connected, your PC is on the same network as the AI Deck and ready to receive forwarded telemetry.
+```bash
+.venv/bin/python python/swarm_hub.py --radio-tools python \
+    --uri radio://0/80/2M/E7E7E7E701
+```
 
-### Step 2 - Start the Python telemetry bridge
-Run the Python bridge [script](../python/mavlink_bridge.py) provided in this repository. It polls the drone through the Crazyradio and forwards its telemetry over UDP to port 14550. See the [Custom GCS Guide](custom_gcs_guide.md) for the full invocation and for connecting more than one drone.
+Leave the hub at its prompt for this manual first flight. Use `status` to inspect the link; no scripted mission is needed.
 
 Once running, you should see messages indicating packets are being received and forwarded.
 
-### Step 3 - Configure your GCS UDP ports (14550 / 14551)
-ArduSwarm uses the following UDP pair:
-- GCS listens on: 14550 (receives telemetry)
-- GCS sends to: 14551 (sends commands)
-
-In QGroundControl
-Configure a UDP link so that:
-- QGC listens on port 14550
-- QGC sends to port 14551
+### Step 3 - Configure your GCS UDP connection
+Configure QGroundControl to listen on UDP port 14550. It replies to the hub source endpoint; do not configure a fixed command port of 14551 for this workflow.
 
 Once configured, the drone should connect automatically within a few seconds.
 
 #### If the GCS does not connect
 Some setups occasionally need a clean reconnect sequence. If QGC does not connect:
 
-- Keep the drone connected over USB, and restart the drone while QGC is running and the Python bridge is active.
+- With the drone disarmed, check power and radio settings, then restart the radio connection while QGC and the hub are running.
 - If it still fails, close/reopen the UDP link in QGC and try again.
 
 ### Step 4 — Set up joystick control and flight-mode buttons
@@ -76,9 +70,7 @@ With the drone connected to the GCS, verify the essentials:
 - Confirm logging is enabled and that a new log will be created on arming / flight
 
 3. Manual control check
-- With props armed only when you’re ready, but before takeoff:
-    - Lightly raise throttle and confirm motor response is smooth and symmetric
-    - Confirm roll/pitch inputs tilt the drone in the expected direction (if you’re doing this while held, do it gently and safely)
+- With propellers removed, verify joystick mapping and motor response on the bench. Refit propellers before the flight test and check control response in the clear flight area; do not hold an armed aircraft.
 
 ### Step 6 — Choose a safe indoor flight space
 This first flight should be done indoors, in a simple environment:

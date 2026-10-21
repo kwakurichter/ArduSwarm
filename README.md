@@ -9,6 +9,18 @@
 
 The primary goal of this project is to create a research tool that enables the practical testing of security algorithms within a distributed drone swarm. This involves significant development to port the Crazyflie hardware onto the ArduPilot software, unlocking a wide feature set for advanced research applications.
 
+## Current update: ArduSwarm v2.2.2 and companion firmware
+
+This documentation covers **ArduSwarm v2.2.2** from the `master` branch of **ArduPilot_cus** (ArduCopter 4.7.2), together with the updated nRF51, Crazyradio, and GCS tools. See the [release and migration notes](docs/release_notes.md) for versions and upgrade details.
+
+- **GCS-based custom scripting:** run Python missions on the GCS computer through `swarm_hub.py`, while QGroundControl remains connected. An AI Deck is optional for this workflow.
+- **4 drone operation and telemetry:** control 1 to 4 drones from one hub. The 4 drone setup uses two Crazyradio 2.0 dongles, each serving two drones on its own channel.
+- **Updated radio firmware:** nRF51 v2.0.0 and Crazyradio v1.0.1 provide the matching large packet transport; the current host tools add shared radio framing, diagnostics, and recovery.
+- **Flow Deck overhaul:** improved PMW3901 sampling and gyro alignment, plus VL53L1X sample validation, freshness tracking, and timeout recovery.
+- **Lighter guard:** the updated `Leg_v5` guard design is 10% lighter than the previous design. Printable and editable files are linked in the [guard guide](docs/guard_printing_guide.md).
+
+Start with the [GCS setup](docs/custom_gcs_guide.md), then the [custom automation guide](docs/using_the_api_for_custom_automation.md).
+
 ## 🚀 The Platform
 ### Hardware: Bitcraze Crazyflie 2.1 and 2.1 Brushless
 The **Crazyflie** platform was chosen for its unique combination of a small form factor, wide-ranging capabilities, and a fully open-source ecosystem. It is targeted at researchers and enthusiasts, offering features crucial for decentralized swarm robotics, including:
@@ -35,7 +47,7 @@ This platform is designed to meet the demands of advanced swarm robotics researc
 - **Decentralized Mesh Networking**: `AP_SwarmMesh` provides multi-hop routing between peers with no central coordinator, so messages reach drones outside direct radio range.
 - **Infrastructure-free Localization**: Utilizes the Flow Deck with its optical flow and Time-of-Flight (ToF) sensors for indoor navigation.
 - **Relative Positioning**: Allows drones to be aware of their peers' positions for collision avoidance and formation control. `AP_Ranging` measures true peer-to-peer distance using the Loco Positioning Deck.
-- **Robustness & Scalability**: Designed to perform reliably in various conditions and to scale from a few drones to dozens.
+- **Simultaneous Operation & Telemetry**: The current GCS mission runner supports one to four drones. Larger swarms remain a development goal.
 - **Ease of Use**: Aims to provide a straightforward user experience, regardless of their hardware or software expertise.
 - **Open Source**: Both the hardware and software are fully open-source, promoting collaboration.
 - **Onboard Computation**: Capable of running higher-order algorithms directly on the drone.
@@ -44,9 +56,9 @@ This platform is designed to meet the demands of advanced swarm robotics researc
 ## 📦 Firmware Releases
 Prebuilt, flashable firmware for every component is published on the [Releases page](https://github.com/kwakurichter/ArduSwarm/releases). Each release bundles the STM32 (ArduPilot) images, the nRF51 image, the Crazyradio 2.0 dongle image, and the Ai Deck images.
 
-The radio components are version coupled: the 252 byte MTU requires matching STM32, nRF51, and Crazyradio firmware. Flash all three from the same release and in order, rather than upgrading them piecemeal.
+The radio components are version coupled: the 252 byte MTU requires matching STM32, nRF51, and Crazyradio firmware. Flash all three from the same release and in order, rather than upgrading them individually.
 
-If you only want to fly, download a release and follow the [Quick Start Guide](docs/quick_start_guide.md) — you do not need to build anything from manually source.
+If you only want to fly, download a release and follow the [Quick Start Guide](docs/quick_start_guide.md).
 
 ## 🛠️ Getting Started
 This section provides a guide to setting up a Crazyflie drone with the custom ArduPilot and Bitcraze firmware developed for this project.
@@ -68,14 +80,14 @@ The first step is to compile the custom ArduPilot firmware and flash it onto the
 3. **Enabling Onboard Sensors**
 For indoor navigation, you will need to enable the optical flow and rangefinder sensors on the Flow Deck.
 
-    **Optical Flow**: For detailed instructions on enabling the PWM3901 optical flow sensor, see the [Optical Flow Guide](docs/optical_flow.md).
+    **Optical Flow**: For detailed instructions on enabling the PMW3901 optical flow sensor, see the [Optical Flow Guide](docs/optical_flow.md).
 
     **Rangefinder (ToF)**: To enable the VL53L1x Time-of-Flight sensor, follow the [RangeFinder Guide](docs/rangefinder.md).
 
 4. **Enabling Radio Communication**
 To enable peer-to-peer communication and to connect to a Ground Control Station, the Crazyflie's radio system must be configured. 
 
-    This is a three-part process involving the secondary nRF51 radio MCU, the main STM32 flight controller, and the Crazyradio dongle on your ground station. 
+    This is a three part process involving the secondary nRF51 radio MCU, the main STM32 flight controller, and the Crazyradio dongle on your ground station.
 
     **First**, the nRF51 MCU must be flashed with a modified firmware. Please reference the [Flashing the NRF Guide](docs/flashing_the_nrf.md).
 
@@ -118,14 +130,14 @@ Battery state updates are a critical function for autonomous flight. Without bat
 
     Please reference the [Battery Monitor Setup Guide](docs/battery_monitor.md) for detailed instructions.
 
-12. **Enable Companion Computer (AI Deck)**
-A companion computer vastly expands the capabilities of the ArduSwarm platform. Using the AI deck, the user is able to connect to a Ground Control Station over WiFi via a full telemetry stream.
-The AI deck also enables the user to write and deploy custom scripts which can facilitate autonomous missions, onboard machine learning, computer vision, etc.
+12. **Optional Companion Computer (AI Deck)**
+A companion computer vastly expands the capabilities of the ArduSwarm platform.
+The AI deck enables the user to write and deploy custom scripts which can facilitate autonomous missions, onboard machine learning, computer vision, etc.
 
     To enable the AI deck on the ArduSwarm platform, please see the [Companion Computer Guide](docs/companion_computer_guide.md).
 
 13. **Motion Capture Localization Support**
-If you have access to a motion capture system for external ground truth localization, you can enable mocap instead of flow-based localization. 
+If you have access to a motion capture system for external ground truth localization, you can enable mocap instead of dead reckoning localization.
 Note that this will require a constant connection to a central ground station to each drone, as well as our 3D printed custom guard to mount passive reflective markers.
 
     Please reference the [Motion Capture Setup Guide](docs/motion_capture_guide.md) for detailed instructions.
@@ -138,8 +150,10 @@ The pre-flight checklist is a critical final check to make sure your first fligh
 15. **First Flight**
 Before attempting automated flight, follow the [First-Flight Guide](docs/first_flight.md) to fly each drone in manual mode to make sure you've setup the drone correctly.
 
-16. **Using the API for Custom Automation**
-[Placeholder]
+16. **GCS-Based Custom Automation and Four-Drone Operation**
+Run custom Python missions from the ground station with the persistent `swarm_hub.py` process. It owns the radio links, relays telemetry to QGC, and runs `guided_swarm.py` missions from an interactive prompt.
+
+    Follow the [Custom GCS Guide](docs/custom_gcs_guide.md) for one-to-four-drone connections and the [Custom Automation Guide](docs/using_the_api_for_custom_automation.md) for mission previews, execution, logs, and extending the scripts.
 
 ## 💻 Development Notes
 ### Memory Optimization
@@ -153,7 +167,7 @@ If you need to revert the Crazyflie to its original Bitcraze firmware for any re
 For step-by-step instructions, please see the [Restoring the Crazyflie Guide](docs/restoring_the_crazyflie.md).
 
 ### ArduPilot Support
-All of the development work detailed in this project is based on ArduPilot ArduCopter version 4.7.0. This project is not yet officially supported by ArduPilot and thus is not maintained to the latest release of ArduCopter. As a result, functionality is not guaranteed for future releases.
+All of the development work detailed in this project is based on ArduPilot ArduCopter version 4.7.2. This project is not yet officially supported by ArduPilot and thus is not necessarily maintained to the latest release of ArduCopter. As a result, functionality is not guaranteed for future releases.
 
 If you attempt to port this work to more recent versions of ArduPilot and run into compilation errors due to depreciation issues, please revert back to this [repository](https://github.com/kwakurichter/ArduPilot_cus).
 
@@ -173,8 +187,7 @@ Additionally, there are several patches required - see the [port overview doc](/
 ## 🔮 Future Work
 This platform provides a foundation for a wide range of swarm robotics research. Future work will include:
 
-- Implementing and testing specific differential game-based defensive algorithms.
-- Polish stability/throttle/position controller gain tune.
+- Implementing and testing specific differential game defensive algorithms.
 - Developing a user-friendly interface for managing swarm experiments.
 - Fusing `AP_Ranging` distance estimates into a full relative position solution for robust collision avoidance.
 - Upstreaming `AP_SwarmMesh` into mainline ArduPilot.
@@ -186,4 +199,4 @@ This platform provides a foundation for a wide range of swarm robotics research.
 
 ---
 
-**Last Modified:** 2026-08-22
+**Last Modified:** 2026-10-20

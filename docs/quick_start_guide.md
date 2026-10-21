@@ -6,12 +6,13 @@ The ArduSwarm platform involves a fair amount of modification to both the base A
 To begin the process, we need to gather the required Bitcraze hardware and install required the software tools. The hardware requirements are as follows:
 
 ### Parts List
-- (Qty. 1+) Crazyflie 2.1 Kit
+- (Qty. 1–4) Crazyflie 2.1 or 2.1 Brushless
 - (Qty. 1+) Flow Deck v2
 - (Qty. 1+) SD Card Deck
 - (Qty. 1+) Micro SD card (any brand)
-- (Qty. 1+) AI Deck
-- (Qty. 1) Crazyradio PA dongle
+- (Optional, per drone) AI Deck for onboard companion applications
+- (Qty. 1–2) Crazyradio 2.0 dongles with custom firmware; use two for the four-drone setup
+- (Qty. 1) Crazyradio PA for the stock over-the-air bootloading procedure
 - (Qty. 1) Micro USB Cable
 
 To ensure you have all of the required hardware, please reference the [Hardware Setup](/docs/hardware_setup.md) guide.
@@ -48,7 +49,7 @@ Install STM32CubeProgrammer and open it before moving on to the next step.
 
 ## Flashing the Firmware
 ### Download a release
-Every image referenced below is published on the [Releases page](https://github.com/kwakurichter/ArduSwarm/releases). Download a single release and use its images throughout — do not mix images from different releases.
+Get compatible images from the [Releases page](https://github.com/kwakurichter/ArduSwarm/releases). This update uses ArduSwarm v2.2.2 as its STM32 baseline, nRF51 v2.0.0, and Crazyradio v1.0.1. Check the [release notes](release_notes.md) for filenames and included firmware changes; component version numbers do not need to be identical.
 
 This matters more than it used to. The STM32, nRF51, and Crazyradio firmware negotiate a 252 byte radio packet size, so all three have to agree. A mismatched set will flash successfully and then fail to communicate at all.
 
@@ -57,8 +58,8 @@ Flashing all of the required firmware must be done according to a strict order o
 
 If your Crazyflie drone has previously been flashed with ArduPilot, please reference the [Restoring the Crazyflie](/docs/restoring_the_crazyflie.md) guide before proceeding.
 
-### AI Deck
-Within ArduSwarm, the AI Deck serves as the "brain" of each drone, acting as a companion computer to the main STM32 flight controller. The AI Deck houses all of the custom missions and automation that are at the heart of the ArduSwarm platform.
+### AI Deck (optional)
+GCS-based custom scripts run on your computer and do not require an AI Deck. Skip this step for the GCS workflow. If you use an AI Deck for onboard computation or companion missions, flash it before replacing the stock STM32 firmware.
 
 To flash the firmware on the AI deck, please reference the [Companion Computer Guide](/docs/companion_computer_guide.md) and return to this quick start guide once you have successfully flashed one of the pre-compiled example firmware.
 
@@ -89,8 +90,6 @@ cfloader flash path-to-your-folder/cf2_nrf.bin nrf51-fw
 ```
 
 The NRF51 should now flash over the air. It should only take a few seconds. You will know if you were successful if the Crazyflie eventually powers on again by itself normally.
-
-![Flashing the NRF](/docs/images/flashing_the_nrf/flashing.png)
 
 ### STM32 Flight Controller
 The STM32 is the main MCU on the Crazyflie drones which functions as the flight controller. The flight controller is responsible for managing all of the primary flight related tasks, including controlling/stabilizing the motors, polling sensors for data, state estimation, interpreting commands, managing telemetry communication, etc.
@@ -140,12 +139,18 @@ Finally, the ground-station side of the radio link needs the matching firmware.
 A Crazyradio 2.0 running the stock Bitcraze firmware cannot exchange 252-byte
 packets and will not connect to an ArduSwarm drone.
 
-Download `crazyradio2.uf2` from the same release, put the dongle into bootloader
+Download the compatible `crazyradio2-v1.0.1.uf2` image, put the dongle into bootloader
 mode so it mounts as a USB drive, and copy the file across. Full instructions,
-including how to connect to two drones at once, are in the
+including how to connect up to four drones, are in the
 [Crazyradio Dongle Guide](/docs/crazyradio_dongle.md).
 
-## Next Steps
-Now that all of the ArduSwarm firmware is installed, we can move on to flight testing. Re-assemble the drone according to the [Hardware Setup](/docs/hardware_setup.md) guide.
+## GCS scripts and telemetry
 
-Once assembled, proceed to the[Pre-Flight Checklist](/docs/pre_flight_checklist.md).
+Follow the [GCS setup guide](custom_gcs_guide.md) to install `pyusb` and `pymavlink` and start `python/swarm_hub.py`. Use one Crazyradio 2.0 for one or two drones; the 4 drone example uses two dongles on different channels. Configure each aircraft's `MAV_SYSID` and `SYSL_CHAN` individually before starting the group.
+
+The [custom automation guide](using_the_api_for_custom_automation.md) covers offline previews and missions from the hub prompt. No AI Deck firmware or onboard Lua setup is needed for GCS-based scripting.
+
+## Next Steps
+Now that all of the ArduSwarm firmware is installed, we can move on to flight testing. Reassemble the drone according to the [Hardware Setup](/docs/hardware_setup.md) guide.
+
+Once assembled, proceed to the [Pre-Flight Checklist](/docs/pre_flight_checklist.md).

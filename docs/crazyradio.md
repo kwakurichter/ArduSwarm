@@ -11,41 +11,12 @@ Incoming MAVLink data are fed into mavlink_parse_char(), which reconstructs mess
 By decoupling message definition (in an XML) from the transport layer, ArduPilot can easily support multiple MAVLink versions, throttle bandwidth per-port, and automatically fragment large payloads, ensuring robust communication across a wide range of links and bandwidth constraints.
 
 ## Communication on Crazyflie
-Bitcraze’s Crazyflie communication pipeline layers a lightweight radio transport (CRTP) on top of an onboard routing protocol (Syslink) to shuttle data between the GCS and the STM32 flight MCU.
 
-On the PC side, the Crazyflie Python library takes high-level data (joystick setpoints, parameter reads, commands, etc.) and wraps it into a CRTP packet (two-byte sync, a one-byte port ID, a one-byte length, plus payload).
+Stock Bitcraze applications use CRTP over the Crazyflie's radio and Syslink between the nRF51 and STM32. The current ArduSwarm application uses a custom large packet MAVLink transport instead.
 
-That frame is sent over 2.4 GHz radio and picked up by the secondary NRF51 MCU onboard the Crazyflie. The NRF then parses the CRTP header and payload; if the packet’s port indicates it’s for the flight controller, the NRF then encloses the payload in a Syslink frame (sync bytes 0xBC, 0xCF, a type, and length byte) and writes it out on its UART to the STM32.
+The GCS tools send an ESB payload with a one byte marker and up to 251 bytes of MAVLink data. The nRF51 forwards these opaque chunks over Syslink; it does not parse MAVLink. The host and STM32 reconstruct complete MAVLink frames. Frames larger than one chunk can span packets, and the host maintains a separate receive stream for each aircraft so fragments from different drones do not mix.
 
-The STM32’s Syslink parser strips off the Syslink framing and hands the original payload to the appropriate places.
-
-Telemetry and status from the STM32 take the reverse path: the STM32 encodes data into Syslink frames, sends them over UART to the NRF51, the NRF unwraps Syslink and repackages the raw payload into CRTP packets on the appropriate port, and transmits them back to the GCS.
-
-This two-stage framing separates radio transport from onboard routing, minimizing overhead while ensuring reliable, low-latency communication.
-
-## Custom Communication Pipeline
-Our goal is to bridge ArduPilot’s MAVLink stack with Bitcraze’s CRTP/Syslink radio—using only the Crazyflie’s onboard NRF51—to avoid extra radio hardware, saving weight and power.
-
-The pipeline must remain invisible to existing MAVLink streams and must not interfere with the NRF51’s built-in tasks (power management, OTA flashing, etc.).
-
-### How It Works
-1. **Initialization**
-- On boot, the STM32 sends Syslink-framed configuration packets (radio channel, data rate, address) over UART to the idle NRF51.
-- The NRF51 applies these settings, then indicates link readiness by setting its Clear to Send (CTS) pin low.
-- The link is considered live once the first valid MAVLink message is decoded from the NRF51.
-
-2. **Uplink: STM32 → NRF51 → GCS**
-- ArduPilot serializes telemetry into MAVLink frames.
-- Frames are wrapped in Syslink and buffered until CTS is low and the link is open.
-- The NRF51 strips the Syslink envelope, attaches the CRTP header, and queues the packet for 2.4 GHz transmission.
-
-3. **Downlink: GCS → NRF51 → STM32**
-- The GCS takes in MAVLink data (heartbeats, initialization commands, etc.) and general commands from the user.
-- It wraps them in CRTP and sends them to the NRF51.
-- The NRF51 unwraps CRTP into Syslink frames and forwards them to the STM32 over UART.
-- The STM32’s Syslink parser re-builds the MAVLink packet and feeds it into ArduPilot’s MAVLink parser.
-
-By layering CRTP (radio transport) over Syslink (onboard routing), we keep transport details separate from flight-controller logic—minimizing overhead while ensuring robust, low-latency MAVLink communication.
+Use the supplied `crazyradio2_large.py` driver and bridge/hub for this link. Stock `cflib` is still used for the legacy bootloader workflow, but not for application telemetry. See the [GCS guide](custom_gcs_guide.md) for the current 1 to 4 drone setup.
 
 ### Telemetry and P2P Together
 Earlier versions of this pipeline had to choose between carrying a GCS telemetry stream and carrying peer-to-peer broadcasts, because both competed for the same radio path and the same small CRTP payload budget.

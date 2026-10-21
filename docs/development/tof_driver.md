@@ -32,8 +32,6 @@ The driver selects a distance mode and a matching timing budget:
 
 The inter-measurement period is derived as `timing_budget_ms + 5`, giving the sensor the minimum ~4 ms it needs between measurements plus a margin.
 
-**Short mode is the right default indoors.** It is far more tolerant of ambient infrared and completes in 20 ms rather than 140 ms, and its reduced maximum range is irrelevant on a vehicle that flies at a metre or two. Long mode's 140 ms budget is slower than the vehicle's own dynamics.
-
 Initialization is the standard ST sequence — `WaitDeviceBooted`, `DataInit`, `StaticInit`, `SetDistanceMode`, `SetMeasurementTimingBudget`, `SetInterMeasurementPeriod`, `StartMeasurement` — with each step's status checked and reported to the GCS on failure.
 
 ---
@@ -71,3 +69,11 @@ The existing [RangeFinder Guide](../rangefinder.md) covers orientation, minimum 
 
 - [Optical Flow Driver](optical_flow_driver.md) — the other half of the Flow Deck
 - [RangeFinder Guide](../rangefinder.md) — operational setup
+
+## Validity and recovery overhaul in v2.2.2
+
+The callback validates the ST range status and publishes distance, quality, and the sample timestamp together. `update()` consumes each new sample once. Invalid samples and read failures report unavailable data. A sample older than 500 ms is stale; sustained bus errors can escalate to `NotConnected` after 1000 ms.
+
+After 1000 ms without a completed sample, the bus callback attempts `StopMeasurement` followed by `StartMeasurement`, with at least 1000 ms between attempts. Pending pre-recovery measurements are discarded. A restart does not advance measurement freshness timestamps; new data must arrive before the sensor can be reported healthy.
+
+When compiled with `AP_RANGEFINDER_FLOWDECK_DIAGNOSTICS_ENABLED`, `RNGFND1_FD_LOG=1` enables `RFD`, `RFS`, and `RFR` diagnostics at 1 Hz. Counters include activity while logging is disabled. The switch does not control sensor recovery and defaults off in firmware. See the [operational guide](../rangefinder.md) and [release scope](../release_notes.md).

@@ -88,3 +88,13 @@ The existing [Optical Flow Guide](../optical_flow.md) covers the operational set
 
 - [ToF Driver](tof_driver.md) — the other half of the Flow Deck
 - [Optical Flow Guide](../optical_flow.md) — operational setup and calibration
+
+## Sampling overhaul in v2.2.2
+
+The current implementation checks chip-select and transfer success, waits 150 µs between the motion-burst address and data read, and rejects failed reads without publishing fabricated motion. It accepts valid motion status `0xB0` and zero-displacement `0x30` reports; other statuses are rejected.
+
+The 100 Hz callback maintains continuous timing windows. Valid zero-motion samples contribute elapsed time and gyro data, preventing a stationary interval from disappearing from the averaging window. Gyro compensation uses the mean of the previous and current gyro sample for each polling interval (trapezoidal integration), with the endpoint advanced even on rejected polls.
+
+`FLOW_FD_DMAX` limits raw displacement (zero disables), `FLOW_FD_SQUAL` sets the minimum quality, and `FLOW_FD_SCALE` converts counts to radians before per-axis corrections. Callback registration is checked and happens only after sensor configuration completes.
+
+`FLOW_FD_LOG` controls optional `OFR` per-poll, `OFT` publication timing, and `OFD`/`OFM` summary diagnostics when `AP_OPTICALFLOW_FLOWDECK_RAW_LOG_ENABLED` is compiled in. In a diagnostic build, the runtime switch defaults off and does not change sampling or gyro averaging. Enabling it adds approximately 5.4 kB/s to onboard logs. See the [operational guide](../optical_flow.md) and [release scope](../release_notes.md).

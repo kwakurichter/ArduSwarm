@@ -19,7 +19,7 @@ The ArduSwarm ArduPilot port lives in [ArduPilot_cus](https://github.com/kwakuri
 git submodule update --init --recursive
 ```
 
-The fork is based on **ArduCopter 4.7.0** and already contains the ArduSwarm libraries — `AP_Syslink`, `AP_SwarmMesh`, and `AP_Ranging`.
+The fork is based on **ArduCopter 4.7.2** and already contains the ArduSwarm libraries — `AP_Syslink`, `AP_SwarmMesh`, and `AP_Ranging`.
 
 If you do not need to modify the firmware, skip this guide entirely and download a prebuilt image from the [Releases page](https://github.com/kwakurichter/ArduSwarm/releases).
 

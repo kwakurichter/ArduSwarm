@@ -8,11 +8,11 @@ The ArduSwarm radio path carries 252 byte packets, well beyond the 31 byte CRTP 
 
 ## Flashing the Dongle
 ### From a release (recommended)
-Download `crazyradio2.uf2` from the [Releases page](https://github.com/kwakurichter/ArduSwarm/releases).
+For this update, download `crazyradio2-v1.0.1.uf2` from the [Releases page](https://github.com/kwakurichter/ArduSwarm/releases).
 
 - Put the Crazyradio 2.0 into bootloader mode (press and hold button while plugging in - LED should blink red).
 - It will appear as a USB device.
-- Copy `crazyradio2.uf2` onto it.
+- Copy `crazyradio2-v1.0.1.uf2` onto it.
 - The dongle should disconnect automatically. Unplug and plug in again (LED should flash white once).
 
 Make sure the dongle image comes from the same release as your drone firmware. The 252 byte MTU has to be agreed on by the STM32, the nRF51, and the dongle, and mismatched versions will fail to communicate.
@@ -36,26 +36,14 @@ just flash
 
 `just` on its own lists all available targets. Refer to the upstream [Bitcraze build documentation](https://www.bitcraze.io/documentation/repository/crazyradio2-firmware/main/) for details on the Zephyr toolchain and for the DFU flashing path if you would rather not use a debug probe.
 
-## Connecting to Two Drones at Once
-The `nrf-firmware-cus` submodule ships a Python bridge script, `tools/mavlink_bridge.py`, that makes the dongle useful for swarm work. It polls one or more vehicles and forwards their telemetry to a ground control station over UDP:
+## Connecting to 1 to 4 Drones
+Use the current `python/` tools in this repository. `swarm_hub.py` combines radio polling, UDP telemetry to QGC, and an interactive mission prompt. `mavlink_bridge.py` is the telemetry only alternative.
 
-```
-.venv/bin/python tools/mavlink_bridge.py --udp 127.0.0.1:14550
-```
+The 4 drone configuration uses two Crazyradio 2.0 dongles, each serving two drones on a shared channel. Use different channels for the two dongles, and a distinct `MAV_SYSID` for each drone. Direct P2P traffic cannot cross these channels.
 
-To poll two vehicles, pass a `--uri` for each. Multiplex them onto one dongle rather than using two:
+Follow the [GCS setup guide](custom_gcs_guide.md) for dependencies, the 4 drone address/channel table, and complete launch commands. Continue to the [automation guide](using_the_api_for_custom_automation.md) for GCS-based scripts.
 
-```
---uri radio://0/80/2M/E7E7E7E7E7 --uri radio://0/80/2M/E7E7E7E706
-```
-
-You can point any GCS (Mission Planner, QGroundControl, MAVProxy, etc.) at a normal UDP endpoint and see both vehicles normally. The drones appear as ordinary MAVLink vehicles distinguished by their system IDs, so make sure each drone has a unique `MAV_SYSID` before starting.
-
-Because the script speaks plain UDP MAVLink on the GCS side, it also works with the rest of the MAVLink ecosystem.
-
-Uplink is routed, not duplicated: each vehicle's system id is learned from its downlink, so targeted frames go only to their owner and two vehicles never both answer the same parameter or FTP request. Note that a ground station cannot use `cflib` for this link — see [AP_Syslink](development/ap_syslink.md#8-host-tooling).
-
-See the [Custom GCS Guide](custom_gcs_guide.md) for connecting a ground station to the forwarded stream.
+Version **v1.0.1** fixes USB answer completion and bulk IN termination for shared radio operation. Use the current matching bridge and USB driver as well; the pinned nRF submodule now includes the current host tools required by the hub. See [version details](release_notes.md).
 
 ## Troubleshooting
 **The GCS sees nothing.** Confirm the dongle, nRF51, and STM32 firmware all came from the same release.

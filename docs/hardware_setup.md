@@ -6,15 +6,16 @@
 
 *https://www.bitcraze.io/products/old-products/crazyflie-2-1/*
 
-The hardware platform is composed of the base Crazyflie 2.1, as well as three additional external expansion decks offered by Bitcraze. The list below provides the minimum hardware required to enable all of the functionality described in this project.
+The platform uses a Crazyflie 2.1 or 2.1 Brushless with a Flow Deck v2 and SD Card Deck for navigation and onboard logging. GCS-based scripting runs on the GCS computer; an AI Deck is optional for onboard companion applications. Repeat the aircraft hardware for each of the one to four drones.
 
 ## Parts List
 - (Qty. 1+) Crazyflie 2.1 Kit
 - (Qty. 1+) Flow Deck v2
 - (Qty. 1+) SD Card Deck
 - (Qty. 1+) Micro SD card (any brand)
-- (Qty. 1+) AI Deck
-- (Qty. 1) Crazyradio PA dongle
+- (Optional, per drone) AI Deck for onboard companion applications
+- (Qty. 1–2) Crazyradio 2.0 dongles for telemetry/control; two for the 4 drone setup
+- (Qty. 1) Crazyradio PA for stock OTA bootloading
 - (Qty. 1) Micro USB Cable
 
 *https://store.bitcraze.io/collections/all?page=1*
@@ -54,6 +55,10 @@ Attach the sd card deck to the top of the drone, making sure the arrow on the to
 
 ![SD Card Deck (orientation)](/docs/images/hardware_setup/sd-card-deck-orientation.JPG)
 
+### Optional AI Deck installation
+
+If you are using only GCS-based scripting, skip this section. The following pin modification applies to a stack with an AI Deck.
+
 The next step is a workaround to get the Flow deck, SD Card deck, and AI deck all working at the same time. The SD Card deck uses the main SPI bus to access the filesystem on the micro sd card. This SPI bus is also used by the Flow deck to access the registers on the Optical Flow sensor. As a result, we must share the SPI bus between the two slaves by defining a different CS pin for each respective device.
 
 ![Crazyflie Schematic (SPI Bus)](/docs/images/hardware_setup/schematic-spi-bus.png)
@@ -71,6 +76,8 @@ Finally, attach the AI Deck to the top of the drone. Ensure the camera module is
 Note: ensure the reset pin discussed previously is not making contact with the AI deck as the SD card deck's CS pin will interfere with the operation of the AI deck.
 
 ![AI Deck Pin Gap](/docs/images/hardware_setup/ai-deck-pin-gap.JPG)
+
+For the updated guard design, which is 10% lighter than the previous design, see the [guard printing guide](guard_printing_guide.md).
 
 Your Crazyflie 2.1 hardware should now be ready to begin software setup and later flight testing. All drones used for swarming applications should follow the same setup process.
 

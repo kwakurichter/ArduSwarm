@@ -95,3 +95,20 @@ If you desire logging when power is applied instead of when the drone is armed, 
 Finally, you need to update the parameter LOG_BITMASK. The default value 0 disables all logging. Use your GCS of choice to choose which parameters you would like to log.
 
 For further details, please reference the [official ArduPilot Dataflash Log Guide](https://ardupilot.org/copter/docs/common-downloading-and-analyzing-data-logs-in-mission-planner.html).
+
+## GCS session and mission logs
+
+The persistent hub automatically records MAVLink traffic, radio/link events, and individual mission logs in `python/logs/<date>/` when run from this repository's layout. Use `--log-dir PATH` to select another location. See the [automation guide](using_the_api_for_custom_automation.md#logs) for file types. These records complement onboard Dataflash logs, which are needed for high frequency sensor and controller analysis.
+
+## Flow Deck diagnostics in the current update
+
+The v2.2.2 source provides two diagnostic switches, with different availability in the release build:
+
+| Switch | Records | Purpose |
+|---|---|---|
+| `FLOW_FD_LOG=1` | `OFR`, `OFT`, `OFD`, `OFM` | Optical flow sampling, timing, and summaries; requires a custom diagnostic build |
+| `RNGFND1_FD_LOG=1` | `RFD`, `RFS`, `RFR` | Rangefinder activity, sample status, and recovery diagnostics at 1 Hz |
+
+The standard v2.2.2 board definitions compile optical flow diagnostics out (`AP_OPTICALFLOW_FLOWDECK_RAW_LOG_ENABLED=0`), so `FLOW_FD_LOG` is absent. Rangefinder diagnostics are compiled in, with their runtime switch defaulting off. The brushless parameter snapshot enables rangefinder diagnostics. Changing the switches does not change sensor sampling or recovery and does not require a reboot. Optical flow diagnostics add approximately 5.4 kB/s; disable detailed diagnostics after investigation to reduce SD/logging load.
+
+The firmware also includes opt-in scheduler/IMU-wait profiling and active Guided horizontal velocity PID logging. Record the exact build revision with every experiment.

@@ -23,7 +23,11 @@ The guard was developed in SolidWorks through multiple iterations. The workflow 
     - Impact resistance (cracking during crashes or landing)
 
 ## Files included in the repository
-All [printable and editable files](/docs/printing/) are provided in the repo so you can manufacture the guard using a 3D printer of your choice.
+
+The current **Leg_v5** guard design is 10% lighter than the previous design (actual printed mass depends on material and slicer settings).
+
+- [Leg_v5.STL](printing/Leg_v5.STL): printable model.
+- [Leg_v5.SLDPRT](printing/Leg_v5.SLDPRT): editable SolidWorks source.
 
 ## Printing the guard
 The guard is intended to print on common consumer printers using standard materials. It does not require exotic filaments.
@@ -58,6 +62,6 @@ Marker attachment depends on your OptiTrack marker type. The markers we used wer
 ## Notes and troubleshooting
 - Tracking jitter: If you see noisy pose estimates, the usual causes are (a) partial occlusion, (b) flexible marker posts, or (c) poor camera coverage. Consider checking your camera coverage/orientation.
 
-- Fit too tight/loose: Printing tolerances vary. If you see consistent mismatch, adjust scaling by a small amount or modify the STEP/SolidWorks source and re print.
+- Fit too tight/loose: Printing tolerances vary. If you see consistent mismatch, adjust scaling by a small amount or modify the SolidWorks source and re print.
 
 - Cracked posts after impact: PLA+ is stiff but can be brittle. PETG can improve survivability if you’re doing lots of crash-prone testing.
